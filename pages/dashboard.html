@@ -1,118 +1,128 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel Principal - ASTRO</title>
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="dashboard-body">
-
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body class="dashboard-body">
     <nav class="navbar">
-        <div class="nav-logo">
-            <i class="fas fa-star"></i> ASTRO
-        </div>
-        <div class="nav-links">
-            <a href="#"><i class="far fa-user-circle"></i> Mi Perfil</a>
-            <a href="index.html"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
-        </div>
+      <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
+      <div class="nav-links">
+        <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
+        <a href="../index.html"
+          ><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a
+        >
+      </div>
     </nav>
 
     <main class="dashboard-container">
-        <header class="dashboard-header">
-            <h1>Panel Principal</h1>
-            <p class="subtitle">Gestiona tus cuentas y finanzas</p>
-        </header>
+      <header class="dashboard-header">
+        <h1>Panel Principal</h1>
+        <p class="subtitle">Gestiona tus cuentas y finanzas</p>
+      </header>
 
-        <section class="balance-main card">
-            <div class="balance-info">
-                <span class="label">Balance Total</span>
-                <h2>$43,871.25</h2>
-                <p class="trend"><i class="fas fa-chart-line"></i> +5.2% este mes</p>
-            </div>
-            <i class="far fa-eye eye-icon"></i>
-        </section>
+      <section class="balance-main card">
+        <div class="balance-info">
+          <span class="label">Balance Total</span>
+          <h2>$43,871.25</h2>
+          <p class="trend"><i class="fas fa-chart-line"></i> +5.2% este mes</p>
+        </div>
+        <i class="far fa-eye eye-icon"></i>
+      </section>
 
-        <section class="accounts-grid">
-            <div class="card account-card">
-                <div class="card-header">
-                    <i class="fas fa-credit-card icon-gold"></i>
-                    <span class="card-number">**** **** **** 4532</span>
-                </div>
-                <h3>Tarjeta de Crédito</h3>
-                <div class="saldo-box">
-                    <span class="label">Saldo Actual</span>
-                    <p class="amount">$5,420.50</p>
-                </div>
-                <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
-                <span class="label">Disponible: $4,579.50</span>
-            </div>
+      <section class="accounts-grid">
+        <div class="card account-card">
+          <div class="card-header">
+            <i class="fas fa-credit-card icon-gold"></i>
+            <span class="card-number">**** **** **** 4532</span>
+          </div>
+          <h3>Tarjeta de Crédito</h3>
+          <div class="saldo-box">
+            <span class="label">Saldo Actual</span>
+            <p class="amount">$5,420.50</p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress" style="width: 70%"></div>
+          </div>
+          <span class="label">Disponible: $4,579.50</span>
+        </div>
 
-            <div class="card account-card">
-                <div class="card-header">
-                    <i class="fas fa-wallet icon-gold"></i>
-                    <span class="card-number">**** **** **** 7891</span>
-                </div>
-                <h3>Cuenta Corriente</h3>
-                <div class="saldo-box">
-                    <span class="label">Saldo Actual</span>
-                    <p class="amount">$12,850.75</p>
-                </div>
-            </div>
+        <div class="card account-card">
+          <div class="card-header">
+            <i class="fas fa-wallet icon-gold"></i>
+            <span class="card-number">**** **** **** 7891</span>
+          </div>
+          <h3>Cuenta Corriente</h3>
+          <div class="saldo-box">
+            <span class="label">Saldo Actual</span>
+            <p class="amount">$12,850.75</p>
+          </div>
+        </div>
 
-            <div class="card account-card">
-                <div class="card-header">
-                    <i class="fas fa-piggy-bank icon-gold"></i>
-                    <span class="card-number">**** **** **** 2234</span>
-                </div>
-                <h3>Cuenta de Ahorro</h3>
-                <div class="saldo-box">
-                    <span class="label">Saldo Actual</span>
-                    <p class="amount">$25,600.00</p>
-                </div>
-                <span class="badge">Interés Anual: 2.5%</span>
-            </div>
-        </section>
+        <div class="card account-card">
+          <div class="card-header">
+            <i class="fas fa-piggy-bank icon-gold"></i>
+            <span class="card-number">**** **** **** 2234</span>
+          </div>
+          <h3>Cuenta de Ahorro</h3>
+          <div class="saldo-box">
+            <span class="label">Saldo Actual</span>
+            <p class="amount">$25,600.00</p>
+          </div>
+          <span class="badge">Interés Anual: 2.5%</span>
+        </div>
+      </section>
 
-        <section class="actions-grid">
-            <div class="card action-card">
-                <i class="fas fa-exchange-alt"></i>
-                <div>
-                    <h4>Transferencias</h4>
-                    <p>Envía dinero de forma rápida y segura</p>
-                </div>
+      <section class="actions-grid">
+        <a href="transferencias.html">
+          <div class="card action-card">
+            <i class="fas fa-exchange-alt"></i>
+            <div>
+              <h4>Transferencias</h4>
+              <p>Envía dinero de forma rápida y segura</p>
             </div>
-            <div class="card action-card">
-                <i class="fas fa-history"></i>
-                <div>
-                    <h4>Movimientos</h4>
-                    <p>Consulta tu historial de transacciones</p>
-                </div>
+          </div>
+        </a>
+
+        <a href="movimientos.html">
+          <div class="card action-card">
+            <i class="fas fa-history"></i>
+            <div>
+              <h4>Movimientos</h4>
+              <p>Consulta tu historial de transacciones</p>
             </div>
-            <div class="card action-card">
-                <i class="fas fa-plus-circle"></i>
-                <div>
-                    <h4>Solicitar Tarjeta</h4>
-                    <p>Pide una nueva tarjeta de crédito</p>
-                </div>
+          </div>
+        </a>
+        <a href="solicitar-tarjeta.html">
+          <div class="card action-card">
+            <i class="fas fa-plus-circle"></i>
+            <div>
+              <h4>Solicitar Tarjeta</h4>
+              <p>Pide una nueva tarjeta de crédito</p>
             </div>
-        </section>
+          </div>
+        </a>
+      </section>
     </main>
 
     <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <i class="fas fa-star"></i> ASTRO
-            </div>
-            <p class="copyright">© 2026 ASTRO Bank. Todos los derechos reservados.</p>
-            <div class="footer-links">
-                <a href="#">Privacidad</a>
-                <a href="#">Términos</a>
-                <a href="#">Contacto</a>
-            </div>
+      <div class="footer-content">
+        <div class="footer-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <p class="copyright">
+          © 2026 ASTRO Bank. Todos los derechos reservados.
+        </p>
+        <div class="footer-links">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+          <a href="#">Contacto</a>
         </div>
+      </div>
     </footer>
-
-</body>
+  </body>
 </html>

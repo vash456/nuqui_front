@@ -216,6 +216,8 @@ h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weig
     gap: 20px;
     margin-bottom: 30px;
 }
+.actions-grid a { text-decoration: none; color: inherit; }
+
 
 /* ACCOUNT CARDS */
 .account-card { padding: 25px; text-align: left; }
@@ -237,6 +239,7 @@ h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weig
     padding: 20px;
     cursor: pointer;
 }
+.action-card:hover { background-color: rgba(255, 179, 0, 0.1); }
 
 .action-card i { font-size: 28px; color: var(--primary-gold); }
 .action-card h4 { margin-bottom: 2px; }
