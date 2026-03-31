@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transferencias - ASTRO</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <div class="nav-links">
+            <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
+            <a href="index.html"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="transfer-wrapper">
+            <a href="dashboard.html" class="back-link">← Volver al Panel</a>
+            
+            <header class="dashboard-header" style="text-align: center;">
+                <h1 class="text-gold">Transferencias</h1>
+                <p class="subtitle">Envía dinero de forma segura</p>
+            </header>
+
+            <div class="auth-card">
+                <form>
+                    <div class="input-group">
+                        <label>Desde mi cuenta</label>
+                        <select class="dark-input select-custom">
+                            <option>Cuenta Corriente - $12.850,75</option>
+                            <option>Cuenta de Ahorro - $25.600,00</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Beneficiario</label>
+                        <div class="input-wrapper">
+                            <i class="far fa-user"></i>
+                            <input type="text" placeholder="Nombre del destinatario" class="dark-input">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Número de Cuenta</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-hashtag"></i>
+                            <input type="text" placeholder="# ES00 0000 0000 0000 0000 0000" class="dark-input">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Cantidad</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-euro-sign"></i>
+                            <input type="number" step="0.01" placeholder="0.00" class="dark-input">
+                            <span class="currency-tag">EUR</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Concepto (Opcional)</label>
+                        <div class="input-wrapper" style="align-items: flex-start;">
+                            <i class="far fa-comment-alt" style="top: 15px;"></i>
+                            <textarea placeholder="Descripción de la transferencia" class="dark-input" rows="3" style="padding-top: 12px; resize: none;"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn primary full-width">
+                        <i class="fas fa-paper-plane"></i> Realizar Transferencia
+                    </button>
+                </form>
+
+                <div class="security-badge">
+                    <i class="fas fa-lock"></i> Todas las transferencias están protegidas con encriptación de nivel bancario
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-star"></i> ASTRO</div>
+            <p class="copyright">© 2026 ASTRO Bank. Todos los derechos reservados.</p>
+            <div class="footer-links">
+                <a href="#">Privacidad</a> <a href="#">Términos</a> <a href="#">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

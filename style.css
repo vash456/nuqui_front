@@ -1,0 +1,423 @@
+/* =========================================
+   VARIABLES GLOBALES (El ADN de ASTRO)
+   ========================================= */
+:root {
+    --primary-gold: #ffb300;
+    --primary-hover: #ffcc00;
+    --bg-dark: #000000;
+    --bg-gradient-top: #2b1f00;
+    --card-bg: rgba(10, 10, 10, 0.7);
+    --input-bg: #0a0a0a;
+    --border-color: #332800;
+    
+    --text-main: #ffffff;
+    --text-muted: #888888;
+    --text-label: #dddddd;
+
+    --glow-star: drop-shadow(0 0 20px rgba(255, 179, 0, 0.8));
+    --glow-button: 0 4px 15px rgba(255, 179, 0, 0.3);
+    --transition: 0.3s ease;
+}
+
+/* =========================================
+   RESET & BASE
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at top, var(--bg-gradient-top), var(--bg-dark));
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* =========================================
+   COMPONENTES COMPARTIDOS
+   ========================================= */
+
+/* Estrella (Usada en todas las páginas) */
+.star, .star-header {
+    font-size: 55px;
+    color: var(--primary-gold);
+    filter: var(--glow-star);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Botones (Unificados) */
+.btn {
+    text-decoration: none;
+    padding: 15px 35px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-block;
+    border: none;
+    text-align: center;
+}
+
+.primary {
+    background: var(--primary-gold);
+    color: #000;
+    box-shadow: var(--glow-button);
+}
+
+.primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.outline {
+    background: transparent;
+    border: 2px solid var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.outline:hover {
+    background: rgba(255, 179, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Inputs (Usados en Login y Registro) */
+.input-group { margin-bottom: 20px; text-align: left; }
+.input-group label {
+    display: block;
+    color: var(--text-label);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.input-wrapper { position: relative; display: flex; align-items: center; }
+.input-wrapper i { position: absolute; left: 15px; color: var(--primary-gold); }
+.input-wrapper input {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px 12px 12px 45px;
+    color: white;
+    outline: none;
+    transition: var(--transition);
+}
+.input-wrapper input:focus { border-color: var(--primary-gold); }
+
+/* =========================================
+   ESTRUCTURAS DE PÁGINA
+   ========================================= */
+
+/* Contenedores */
+.container { width: 100%; max-width: 1000px; text-align: center; }
+.auth-container { width: 100%; max-width: 450px; text-align: center; }
+
+/* Tarjetas (Landing vs Forms) */
+.card, .auth-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+/* Landing Page (Index) */
+h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weight: 800; }
+.hero .subtitle { font-size: 20px; color: #ccc; margin-bottom: 40px; }
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 60px; }
+.card { padding: 30px; transition: var(--transition); }
+.card:hover { transform: translateY(-5px); border-color: rgba(255, 179, 0, 0.4); }
+.card h3 { color: var(--primary-gold); margin-bottom: 10px; }
+.card p { color: var(--text-muted); font-size: 14px; }
+
+/* Formularios (Auth) */
+.auth-card { padding: 40px; text-align: left; }
+.auth-card h2 { color: var(--primary-gold); font-size: 28px; margin-bottom: 10px; }
+.auth-footer { margin-top: 25px; text-align: center; font-size: 14px; }
+.auth-footer p { color: var(--text-muted); margin-bottom: 10px; }
+.auth-footer a { color: var(--primary-gold); font-weight: bold; }
+.back-link { display: block; color: #555 !important; font-weight: normal !important; }
+
+/* =========================================
+   ESTILOS DASHBOARD & NAVBAR
+   ========================================= */
+
+/* Para que el body del dashboard no centre todo el contenido verticalmente */
+.dashboard-body {
+    display: block;
+    padding-top: 80px; /* Espacio para la navbar fija */
+}
+
+/* NAVBAR */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    z-index: 1000;
+}
+
+.nav-logo {
+    color: var(--primary-gold);
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-links a {
+    color: var(--text-main);
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+/* CONTENEDOR DASHBOARD */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.dashboard-header { margin-bottom: 30px; text-align: left; }
+.dashboard-header h1 { font-size: 36px; letter-spacing: 1px; margin-bottom: 5px; }
+
+/* BALANCE CARD */
+.balance-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.balance-main h2 { font-size: 40px; color: var(--primary-gold); margin: 10px 0; }
+.trend { color: #4ade80; font-size: 14px; }
+.eye-icon { color: var(--primary-gold); font-size: 20px; cursor: pointer; }
+
+/* GRIDS */
+.accounts-grid, .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* ACCOUNT CARDS */
+.account-card { padding: 25px; text-align: left; }
+.card-header { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 12px; margin-bottom: 15px; }
+.icon-gold { color: var(--primary-gold); font-size: 24px; }
+.saldo-box { margin: 15px 0; }
+.amount { font-size: 24px; font-weight: bold; }
+.label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
+
+/* Barra de progreso crédito */
+.progress-bar { background: #222; height: 6px; border-radius: 3px; margin: 10px 0; }
+.progress { background: var(--primary-gold); height: 100%; border-radius: 3px; box-shadow: 0 0 10px var(--primary-gold); }
+
+/* ACTION CARDS */
+.action-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.action-card i { font-size: 28px; color: var(--primary-gold); }
+.action-card h4 { margin-bottom: 2px; }
+
+/* FOOTER (Diseño de la imagen) */
+.main-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 40px 0;
+    margin-top: 100px;
+    background: rgba(0,0,0,0.5);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-logo { color: var(--primary-gold); font-weight: bold; }
+.copyright { color: var(--text-muted); font-size: 13px; }
+.footer-links a { color: var(--text-muted); font-size: 13px; margin-left: 20px; }
+.footer-links a:hover { color: var(--primary-gold); }
+
+
+/* =========================================
+   ESTILOS ESPECÍFICOS DE PERFIL
+   ========================================= */
+
+/* Layout de dos columnas */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.profile-section {
+    padding: 25px;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.section-title {
+    font-size: 18px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--primary-gold);
+}
+
+/* Inputs oscuros del perfil */
+.dark-input {
+    width: 100%;
+    background: #0f0f0f;
+    border: 1px solid #222;
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    margin-top: 5px;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* User Summary Card (Derecha) */
+.user-summary-card {
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-gold);
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+}
+
+.user-email { color: var(--text-muted); font-size: 14px; }
+.divider { border: 0; border-top: 1px solid #222; margin: 20px 0; }
+.user-stats { text-align: left; font-size: 13px; }
+.user-stats p { margin-bottom: 10px; color: var(--text-muted); }
+
+/* Switches y Seguridad */
+.switch-item, .security-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.switch-item:last-child, .security-item:last-child { border: none; }
+.switch-item h4, .security-item h4 { font-size: 15px; margin-bottom: 4px; }
+.switch-item p, .security-item p { font-size: 12px; color: var(--text-muted); }
+
+/* Switch Toggle Simple */
+.astro-switch {
+    width: 40px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--primary-gold);
+}
+
+.full-width { width: 100%; margin-top: 10px; }
+
+/* =========================================
+   CENTRADO Y RESPONSIVE DE TRANSFERENCIAS
+   ========================================= */
+
+/* Centrado del formulario de transferencia */
+.transfer-wrapper {
+    max-width: 550px; /* Un poco más ancho que el login para que respire el texto */
+    margin: 0 auto;   /* Magia del centrado horizontal */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ajuste para que los iconos no se encimen en la cantidad */
+.currency-tag {
+    position: absolute;
+    right: 15px;
+    color: var(--text-muted);
+    font-size: 12px;
+    pointer-events: none;
+}
+
+/* RESPONSIVE TRANSFERENCIAS */
+@media (max-width: 600px) {
+    .dashboard-container {
+        padding: 0 15px;
+    }
+    
+    .transfer-wrapper {
+        max-width: 100%;
+    }
+
+    .auth-card {
+        padding: 25px 20px; /* Reducimos padding en móviles */
+    }
+
+    .dashboard-header h1 {
+        font-size: 28px;
+    }
+}
+
+/* Responsive Dashboard */
+@media (max-width: 768px) {
+    .footer-content { flex-direction: column; text-align: center; }
+    .footer-links a { margin: 0 10px; }
+    .balance-main h2 { font-size: 30px; }
+}
+
+/* Responsive Perfil */
+@media (max-width: 900px) {
+    .profile-layout { grid-template-columns: 1fr; }
+    .input-row { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+    .features { grid-template-columns: 1fr; }
+    h1 { font-size: 45px; }
+    .buttons { display: flex; flex-direction: column; gap: 15px; }
+    .btn { width: 100%; }
+}

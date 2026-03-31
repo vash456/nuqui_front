@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - ASTRO</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fas fa-star"></i> ASTRO
+        </div>
+        <div class="nav-links">
+            <a href="perfil.html" class="active"><i class="far fa-user-circle"></i> Mi Perfil</a>
+            <a href="index.html"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <a href="dashboard.html" class="back-link">← Volver al Panel</a>
+        <header class="dashboard-header">
+            <h1>Mi Perfil</h1>
+            <p class="subtitle">Gestiona tu información personal y preferencias</p>
+        </header>
+
+        <div class="profile-layout">
+            <div class="profile-main">
+                <section class="card profile-section">
+                    <h3 class="section-title"><i class="fas fa-user icon-gold"></i> Información Personal</h3>
+                    <form>
+                        <div class="input-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" value="Juan Pérez García" class="dark-input">
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Email</label>
+                                <div class="input-wrapper">
+                                    <i class="far fa-envelope"></i>
+                                    <input type="email" value="demo@astro.bank" class="dark-input">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Teléfono</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <input type="tel" value="+57 612 345 6785" class="dark-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Dirección</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input type="text" value="Calle Gran Vía, 28, Madrid, España" class="dark-input">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Fecha de Nacimiento</label>
+                            <input type="date" value="1990-05-15" class="dark-input">
+                        </div>
+                        <button type="submit" class="btn primary full-width">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </form>
+                </section>
+
+                <section class="card profile-section">
+                    <h3 class="section-title"><i class="fas fa-bell icon-gold"></i> Preferencias de Notificación</h3>
+                    <div class="switch-group">
+                        <div class="switch-item">
+                            <div>
+                                <h4>Notificaciones por Email</h4>
+                                <p>Recibe actualizaciones en tu correo</p>
+                            </div>
+                            <input type="checkbox" checked class="astro-switch">
+                        </div>
+                        <div class="switch-item">
+                            <div>
+                                <h4>Notificaciones por SMS</h4>
+                                <p>Alertas importantes por mensaje</p>
+                            </div>
+                            <input type="checkbox" class="astro-switch">
+                        </div>
+                        <div class="switch-item">
+                            <div>
+                                <h4>Notificaciones Push</h4>
+                                <p>Alertas en tiempo real</p>
+                            </div>
+                            <input type="checkbox" checked class="astro-switch">
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="profile-sidebar">
+                <div class="card user-summary-card">
+                    <div class="avatar">JP</div>
+                    <h3>Juan Pérez García</h3>
+                    <p class="user-email">demo@astro.bank</p>
+                    <hr class="divider">
+                    <div class="user-stats">
+                        <p><i class="far fa-calendar-alt"></i> Cliente desde: <strong>14 de enero de 2024</strong></p>
+                        <p><i class="fas fa-wallet"></i> Productos activos: <strong>3 cuentas</strong></p>
+                    </div>
+                </div>
+
+                <div class="card profile-section">
+                    <h3 class="section-title"><i class="fas fa-shield-alt icon-gold"></i> Seguridad</h3>
+                    <div class="security-item">
+                        <h4>Cambiar Contraseña</h4>
+                        <p>Actualiza tu contraseña</p>
+                    </div>
+                    <div class="security-item">
+                        <h4>Autenticación de Dos Factores</h4>
+                        <p>Activa 2FA para más seguridad</p>
+                    </div>
+                    <div class="security-item">
+                        <h4>Dispositivos Conectados</h4>
+                        <p>Gestiona tus sesiones activas</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-star"></i> ASTRO</div>
+            <p class="copyright">© 2026 ASTRO Bank. Todos los derechos reservados.</p>
+            <div class="footer-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+                <a href="#">Contacto</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
