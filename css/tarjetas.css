@@ -1,0 +1,163 @@
+/* =========================================
+   PÁGINA SOLICITUD DE TARJETA (REFORZADO)
+   ========================================= */
+
+@import 'style.css';
+
+/* Pasos de Proceso */
+.steps-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0 50px;
+}
+.step-item { display: flex; align-items: center; gap: 10px; color: #666; font-size: 14px; }
+.step-item.active { color: var(--primary-gold); font-weight: bold; }
+.step-circle {
+    width: 28px; height: 28px; border-radius: 50%; background: #222;
+    display: flex; align-items: center; justify-content: center; font-size: 12px;
+}
+.step-item.active .step-circle { background: var(--primary-gold); color: #000; }
+.step-divider { width: 50px; height: 1px; background: #333; }
+
+/* Grid de Tarjetas */
+.cards-display-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.card-selection-item {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+.card-selection-item:hover { transform: translateY(-10px); border-color: var(--primary-gold); }
+.card-selection-item.featured { border-color: var(--primary-gold); }
+
+/* Parte superior visual (LA TARJETA) */
+.card-top {
+    height: 180px;
+    padding: 25px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+/* Fondos con Gradientes Forzados */
+.classic-bg { background: linear-gradient(135deg, #4a4a4a 0%, #1a1a1a 100%) !important; color: white; }
+.gold-bg { background: linear-gradient(135deg, #ffb300 0%, #b37e00 100%) !important; color: black; }
+.platinum-bg { background: linear-gradient(135deg, #cbd5e0 0%, #4a5568 100%) !important; color: white; }
+
+.card-design-circle {
+    position: absolute; top: -30px; right: -30px;
+    width: 130px; height: 130px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.card-icon-main { font-size: 28px; z-index: 2; }
+.card-label-info { z-index: 2; }
+.level-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+.card-title-name { font-size: 20px; font-weight: 800; margin-top: 5px; }
+
+/* Contenido de texto */
+.card-details { padding: 30px; text-align: left; }
+.limit-text { font-size: 13px; color: #888; margin-bottom: 20px; }
+.limit-text strong { color: var(--primary-gold); font-size: 16px; display: block; margin-top: 4px; }
+
+.benefit-list { list-style: none; padding: 0; }
+.benefit-list li { font-size: 13px; color: #ccc; margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; }
+.benefit-list li i { color: var(--primary-gold); font-size: 12px; margin-top: 4px; }
+
+/* Badge RECOMENDADA */
+.recommended-pill {
+    position: absolute; top: 0px; left: 50%; transform: translateX(-50%);
+    background: var(--primary-gold); color: #000; padding: 5px 15px;
+    border-radius: 20px; font-size: 10px; font-weight: bold; z-index: 10;
+}
+
+/* Sección de Beneficios Globales */
+.general-features-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #1a1a1a;
+    padding: 50px;
+    border-radius: 20px;
+    text-align: center;
+}
+.box-title { font-size: 16px; text-transform: uppercase; letter-spacing: 2px; color: #666; margin-bottom: 40px; }
+.features-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.feature-circle {
+    width: 60px; height: 60px; background: rgba(255, 179, 0, 0.1);
+    color: var(--primary-gold); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; font-size: 24px;
+}
+.feature-unit h4 { font-size: 16px; margin-bottom: 8px; }
+.feature-unit p { font-size: 13px; color: #666; }
+
+/* =========================================
+   ESTILO DEL ESCUDO (SECURITY SEAL)
+   ========================================= */
+
+.security-seal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 179, 0, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 179, 0, 0.05);
+    transition: var(--transition);
+}
+
+.security-seal:hover {
+    border-color: var(--primary-gold);
+    background: rgba(255, 179, 0, 0.5);
+}
+
+.security-seal i {
+    font-size: 24px;
+    color: var(--primary-gold);
+    filter: drop-shadow(0 0 10px rgba(255, 179, 0, 0.5));
+}
+
+.security-seal span {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    font-weight: bold;
+}
+
+/* Ajuste al footer para que el escudo quede bien centrado */
+.footer-content {
+    display: flex;
+    flex-direction: column; /* Cambiamos a columna para apilar logo, escudo y links */
+    align-items: center;
+    gap: 30px;
+}
+
+@media (min-width: 768px) {
+    .footer-content {
+        flex-direction: row; /* En PC se vuelve a poner en fila */
+        justify-content: space-between;
+    }
+}
+
+/* Botón Final */
+.cta-section { margin: 50px 0 100px; text-align: center; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .features-columns { grid-template-columns: 1fr; }
+    .cards-display-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Tarjeta - ASTRO</title>
+    <link rel="stylesheet" href="../css/tarjetas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <div class="nav-links">
+            <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
+            <a href="index.html"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="header-navigation">
+            <a href="dashboard.html" class="back-link">← Volver al Panel</a>
+            <header class="dashboard-header-left">
+                <h1 class="text-gold">Solicitar Tarjeta de Crédito</h1>
+                <p class="subtitle">Elige la tarjeta que mejor se adapte a tus necesidades</p>
+            </header>
+        </div>
+
+        <div class="steps-wrapper">
+            <div class="step-item active">
+                <span class="step-circle">1</span>
+                <span class="step-text">Selección</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step-item">
+                <span class="step-circle">2</span>
+                <span class="step-text">Información</span>
+            </div>
+        </div>
+
+        <div class="cards-display-grid">
+            
+            <div class="card-selection-item">
+                <div class="card-top classic-bg">
+                    <div class="card-design-circle"></div>
+                    <i class="fas fa-credit-card card-icon-main"></i>
+                    <div class="card-label-info">
+                        <span class="level-tag">Clásica</span>
+                        <h2 class="card-title-name">ASTRO Classic</h2>
+                    </div>
+                </div>
+                <div class="card-details">
+                    <p class="limit-text">Límite: <strong>hasta €5,000</strong></p>
+                    <ul class="benefit-list">
+                        <li><i class="fas fa-check"></i> Sin cuota anual el primer año</li>
+                        <li><i class="fas fa-check"></i> Cashback 0.5% en compras</li>
+                        <li><i class="fas fa-check"></i> Seguro de compras básico</li>
+                        <li><i class="fas fa-check"></i> App móvil premium</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-selection-item featured">
+                <div class="recommended-pill">RECOMENDADA</div>
+                <div class="card-top gold-bg">
+                    <div class="card-design-circle"></div>
+                    <i class="fas fa-wand-magic-sparkles card-icon-main"></i>
+                    <div class="card-label-info">
+                        <span class="level-tag">Oro</span>
+                        <h2 class="card-title-name">ASTRO Gold</h2>
+                    </div>
+                </div>
+                <div class="card-details">
+                    <p class="limit-text">Límite: <strong>hasta €15,000</strong></p>
+                    <ul class="benefit-list">
+                        <li><i class="fas fa-check"></i> Cashback 1.5% en compras</li>
+                        <li><i class="fas fa-check"></i> Acceso a salas VIP aeropuertos</li>
+                        <li><i class="fas fa-check"></i> Seguro de viaje incluido</li>
+                        <li><i class="fas fa-check"></i> Asistencia 24/7 premium</li>
+                        <li><i class="fas fa-check"></i> Programa de puntos dobles</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-selection-item">
+                <div class="card-top platinum-bg">
+                    <div class="card-design-circle"></div>
+                    <i class="fas fa-chart-line card-icon-main"></i>
+                    <div class="card-label-info">
+                        <span class="level-tag">Platino</span>
+                        <h2 class="card-title-name">ASTRO Platinum</h2>
+                    </div>
+                </div>
+                <div class="card-details">
+                    <p class="limit-text">Límite: <strong>hasta €30,000</strong></p>
+                    <ul class="benefit-list">
+                        <li><i class="fas fa-check"></i> Cashback 2.5% en compras</li>
+                        <li><i class="fas fa-check"></i> Concierge personal 24/7</li>
+                        <li><i class="fas fa-check"></i> Seguro de viaje internacional</li>
+                        <li><i class="fas fa-check"></i> Acceso exclusivo a eventos</li>
+                        <li><i class="fas fa-check"></i> Programa de puntos triple</li>
+                        <li><i class="fas fa-check"></i> Sin límite de gastos emergencias</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <section class="general-features-box">
+            <h3 class="box-title">Todos nuestros productos incluyen</h3>
+            <div class="features-columns">
+                <div class="feature-unit">
+                    <div class="feature-circle"><i class="fa-solid fa-shield"></i></div>
+                    
+                    <h4>Seguridad Máxima</h4>
+                    <p>Protección anti-fraude 24/7</p>
+                </div>
+                <div class="feature-unit">
+                    <div class="feature-circle"><i class="fas fa-bolt"></i></div>
+                    <h4>Proceso Rápido</h4>
+                    <p>Respuesta en 24-48 horas</p>
+                </div>
+                <div class="feature-unit">
+                    <div class="feature-circle"><i class="fas fa-percent"></i></div>
+                    <h4>Sin Comisiones Ocultas</h4>
+                    <p>Transparencia total en costes</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="cta-section">
+            <button class="btn primary btn-large">Continuar con la Solicitud <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-logo">
+            <i class="fas fa-star"></i> ASTRO
+        </div>
+
+        <div class="security-seal">
+            <i class="fa-solid fa-shield-halved"></i> 
+            <span>Seguridad Bancaria Garantizada</span>
+        </div>
+
+        <p class="copyright">© 2026 ASTRO Bank. Todos los derechos reservados.</p>
+        
+        <div class="footer-links">
+            <a href="#">Privacidad</a>
+            <a href="#">Términos</a>
+            <a href="#">Contacto</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
