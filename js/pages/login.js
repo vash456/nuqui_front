@@ -13,13 +13,11 @@ loginForm?.addEventListener('submit', event => {
     const password = formData.get('password')?.toString() || '';
 
     const result = authService.login(identifier, password);
-console.log(result);
+
     if (!result.success) {
         uiService.showMessage(messageBox, result.message);
         return;
     }
-    
-    
 
     uiService.showMessage(messageBox, result.message, 'success');
     setTimeout(() => {

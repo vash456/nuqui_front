@@ -57,17 +57,12 @@ const authService = {
 
   login(identifier, password) {
     const users = this.getUsers();
-    console.log(users);
-    console.log(identifier);
-    
     
     const user = users.find(user =>
       user.usuario.toLowerCase() === identifier.toLowerCase() ||
       user.email.toLowerCase() === identifier.toLowerCase()
     );
 
-    console.log(user);
-    
     if (!user) {
       return { success: false, message: 'Usuario o correo no encontrado.' };
     }
@@ -76,8 +71,20 @@ const authService = {
       return { success: false, message: 'Contraseña incorrecta.' };
     }
 
-    this.saveSession(user);
+    this.saveSession(this.getUserForSession(user));
     return { success: true, message: 'Login exitoso.', user: user.usuario };
+  },
+
+  getUserForSession(user) {
+    return {
+      id: user.id,
+      nombre: user.nombre,
+      identificacion: user.identificacion,
+      usuario: user.usuario,
+      email: user.email,
+      telefono: user.telefono,
+      createdAt: user.createdAt,
+    };
   },
 
   logout() {
