@@ -1,5 +1,5 @@
-import authService from "../services/authService";  
-import uiService from "../services/uiService";
+import authService from "../services/authService.js";  
+import uiService from "../services/uiService.js";
 
 const loginForm = document.querySelector('#loginForm');
 const messageBox = document.querySelector('#loginMessage');
@@ -13,11 +13,13 @@ loginForm?.addEventListener('submit', event => {
     const password = formData.get('password')?.toString() || '';
 
     const result = authService.login(identifier, password);
-
+console.log(result);
     if (!result.success) {
         uiService.showMessage(messageBox, result.message);
         return;
     }
+    
+    
 
     uiService.showMessage(messageBox, result.message, 'success');
     setTimeout(() => {

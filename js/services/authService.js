@@ -57,11 +57,17 @@ const authService = {
 
   login(identifier, password) {
     const users = this.getUsers();
+    console.log(users);
+    console.log(identifier);
+    
+    
     const user = users.find(user =>
       user.usuario.toLowerCase() === identifier.toLowerCase() ||
       user.email.toLowerCase() === identifier.toLowerCase()
     );
 
+    console.log(user);
+    
     if (!user) {
       return { success: false, message: 'Usuario o correo no encontrado.' };
     }
