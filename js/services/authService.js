@@ -71,7 +71,7 @@ const authService = {
     }
 
     this.saveSession(user);
-    return { success: true, message: 'Login exitoso.', user };
+    return { success: true, message: 'Login exitoso.', user: user.usuario };
   },
 
   logout() {
