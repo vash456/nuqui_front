@@ -136,6 +136,24 @@ h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weig
 .card h3 { color: var(--primary-gold); margin-bottom: 10px; }
 .card p { color: var(--text-muted); font-size: 14px; }
 
+/* Mensaje de formulario showMessage */
+.form-message {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+.form-message.error {
+    color: red;
+    background-color: rgba(128, 28, 28, 0.4);
+    border-color: rgba(128, 28, 28, 0.7);
+}
+.form-message.success {
+    color: #4ade80;
+    background-color: rgba(34, 128, 34, 0.4);
+    border-color: rgba(34, 128, 34, 0.7);
+}
+
 /* Formularios (Auth) */
 .auth-card { padding: 40px; text-align: left; }
 .auth-card h2 { color: var(--primary-gold); font-size: 28px; margin-bottom: 10px; }

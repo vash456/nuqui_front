@@ -18,12 +18,13 @@
             <h2>Crear Cuenta</h2>
             <p class="subtitle">Únete a la banca del futuro</p>
             <br>
-            <form>
+            <form id="registerForm">
+                <div id="registerMessage" class="form-message"></div>
                 <div class="input-group">
                     <label>Nombre Completo</label>
                     <div class="input-wrapper">
                         <i class="far fa-user"></i>
-                        <input type="text" placeholder="Tu nombre">
+                        <input type="text" name="nombre" id="nombre" placeholder="Tu nombre" required>
                     </div>
                 </div>
 
@@ -31,7 +32,7 @@
                     <label>Identificación</label>
                     <div class="input-wrapper">
                         <i class="fas fa-id-card"></i>
-                        <input type="text" placeholder="Número de identificación">
+                        <input type="text" name="identificacion" id="identificacion" placeholder="Número de identificación" required>
                     </div>
                 </div>
 
@@ -39,7 +40,7 @@
                     <label>Usuario</label>
                     <div class="input-wrapper">
                         <i class="fas fa-user-check"></i>
-                        <input type="text" placeholder="Nombre de usuario">
+                        <input type="text" name="usuario" id="usuario" placeholder="Nombre de usuario" required>
                     </div>
                 </div>
 
@@ -47,7 +48,7 @@
                     <label>Correo Electrónico</label>
                     <div class="input-wrapper">
                         <i class="far fa-envelope"></i>
-                        <input type="email" placeholder="tu@email.com">
+                        <input type="email" name="email" id="email" placeholder="tu@email.com" required>
                     </div>
                 </div>
 
@@ -55,7 +56,7 @@
                     <label>Teléfono</label>
                     <div class="input-wrapper">
                         <i class="fas fa-phone-alt"></i>
-                        <input type="tel" placeholder="+57 600 000 0000">
+                        <input type="tel" name="telefono" id="telefono" placeholder="+57 600 000 0000">
                     </div>
                 </div>
 
@@ -63,7 +64,7 @@
                     <label>Contraseña</label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" name="password" id="password" placeholder="••••••••" required>
                     </div>
                 </div>
 
@@ -71,7 +72,7 @@
                     <label>Confirmar Contraseña</label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="••••••••">
+                        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="••••••••" required>
                     </div>
                 </div>
 
@@ -84,6 +85,6 @@
             </div>
         </div>
     </div>
-
+    <script type="module" src="../js/pages/register.js"></script>
 </body>
 </html>
