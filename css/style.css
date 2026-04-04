@@ -64,7 +64,8 @@ body {
     display: inline-block;
     border: none;
     text-align: center;
-}
+    }
+    
 
 .primary {
     background: var(--primary-gold);
