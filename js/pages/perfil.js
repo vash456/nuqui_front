@@ -9,6 +9,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveMessage = document.querySelector('#saveMessage');
     const sidebarName = document.querySelector('.user-summary-card h3');
     const sidebarEmail = document.querySelector('.user-email');
+    const avatarCircle = document.querySelector('.avatar');
+
+    function getInitials(name) {
+        if (!name) return '';
+        const parts = name.trim().split(' ').filter(Boolean);
+        if (parts.length === 0) return '';
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        const firstInitial = parts[0].charAt(0).toUpperCase();
+        const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase();
+        return `${firstInitial}${lastInitial}`;
+    }
+
+    function updateAvatarInitials(name) {
+        if (avatarCircle) {
+            avatarCircle.textContent = getInitials(name);
+        }
+    }
 
     function loadProfile() {
         const profileData = localStorage.getItem(storageKey);
@@ -22,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (birthdateInput && profile.birthdate) birthdateInput.value = profile.birthdate;
         if (sidebarName && profile.name) sidebarName.textContent = profile.name;
         if (sidebarEmail && profile.email) sidebarEmail.textContent = profile.email;
+        if (profile.name) updateAvatarInitials(profile.name);
     }
 
     function saveProfile(event) {
@@ -39,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sidebarName) sidebarName.textContent = profile.name;
         if (sidebarEmail) sidebarEmail.textContent = profile.email;
+        updateAvatarInitials(profile.name);
 
         if (saveMessage) {
             saveMessage.style.display = 'block';
