@@ -1,3 +1,6 @@
+import authService from './authService.js';
+import { Cliente } from '../models/Cliente.js';
+
 const uiService = {
   showMessage(element, message, type = 'error') {
     if (!element) return;
@@ -22,6 +25,36 @@ const uiService = {
     button.disabled = false;
     button.textContent = originalText;
   },
+
+  checkSession(redirectUrl = 'login.html') {
+    const currentUser = authService.getCurrentUser();
+    if (!currentUser) {
+      window.location.href = redirectUrl;
+      return false;
+    }
+    return true;
+  },
+
+  manageLogoutLink(redirectUrl = 'login.html') {
+    const currentUser = authService.getCurrentUser();
+    if (currentUser) {
+      const cliente = new Cliente(
+        currentUser.id,
+        currentUser.identificacion,
+        currentUser.nombre,
+        currentUser.telefono,
+        currentUser.usuario,
+        currentUser.email,
+        currentUser.fechaNacimiento,
+        null
+      );
+      cliente.cerrarSesion();
+    } else {
+      authService.logout();
+    }
+
+    window.location.href = redirectUrl;
+  }
 };
 
 export default uiService;

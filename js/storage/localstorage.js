@@ -1,6 +1,6 @@
 ﻿const STORAGE_KEYS = {
-  USERS: 'nuqui_users',
-  SESSION: 'nuqui_session',
+  USERS: 'astro_users',
+  SESSION_PREFIX: 'session_',
 };
 
 const localStorageService = {
@@ -26,15 +26,34 @@ const localStorageService = {
   },
 
   getCurrentSession() {
-    return this.getItem(STORAGE_KEYS.SESSION);
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(STORAGE_KEYS.SESSION_PREFIX)) {
+        return this.getItem(key);
+      }
+    }
+    return null;
   },
 
   saveSession(user) {
-    this.setItem(STORAGE_KEYS.SESSION, user);
+    const key = STORAGE_KEYS.SESSION_PREFIX + user.id;
+    this.setItem(key, user);
   },
 
-  clearSession() {
-    this.removeItem(STORAGE_KEYS.SESSION);
+  clearSession(userId) {
+    if (userId) {
+      const key = STORAGE_KEYS.SESSION_PREFIX + userId;
+      this.removeItem(key);
+    } else {
+      // Fallback: eliminar cualquier sesión si no se pasa userId
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(STORAGE_KEYS.SESSION_PREFIX)) {
+          this.removeItem(key);
+          break;
+        }
+      }
+    }
   },
 };
 

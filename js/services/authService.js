@@ -1,4 +1,5 @@
 ﻿import localStorageService from '../storage/localstorage.js';
+import { Cliente } from '../models/Cliente.js';
 
 const authService = {
   getUsers() {
@@ -9,12 +10,26 @@ const authService = {
     localStorageService.saveUsers(users);
   },
 
+  getUserForSession(user) {
+    return {
+      id: user.id,
+      nombre: user.nombreCompleto || user.nombre,
+      identificacion: user.identificacion,
+      usuario: user.usuario,
+      email: user.email,
+      telefono: user.celular || user.telefono,
+      fechaNacimiento: user.fechaNacimiento,
+      createdAt: user.createdAt,
+    };
+  },
+
   getCurrentUser() {
     return localStorageService.getCurrentSession();
   },
 
   saveSession(user) {
-    localStorageService.saveSession(user);
+    const safeUser = this.getUserForSession(user);
+    localStorageService.saveSession(safeUser);
   },
 
   clearSession() {
@@ -38,16 +53,27 @@ const authService = {
       return { success: false, message: 'Ya existe un usuario con la misma identificación, usuario o correo.' };
     }
 
-    const newUser = {
-      id: Date.now().toString(),
-      nombre: userData.nombre.trim(),
-      identificacion: userData.identificacion.trim(),
-      usuario: userData.usuario.trim(),
-      email: userData.email.trim().toLowerCase(),
-      telefono: userData.telefono ? userData.telefono.trim() : '',
-      password: userData.password,
-      createdAt: new Date().toISOString(),
-    };
+    const newUser = new Cliente(
+      Date.now().toString(),
+      userData.identificacion.trim(),
+      userData.nombre.trim(),
+      userData.telefono ? userData.telefono.trim() : '',
+      userData.usuario.trim(),
+      userData.email.trim().toLowerCase(),
+      userData.fechaNacimiento || null,
+      userData.password
+    );
+
+    // const newUser = {
+    //   id: Date.now().toString(),
+    //   nombre: userData.nombre.trim(),
+    //   identificacion: userData.identificacion.trim(),
+    //   usuario: userData.usuario.trim(),
+    //   email: userData.email.trim().toLowerCase(),
+    //   telefono: userData.telefono ? userData.telefono.trim() : '',
+    //   password: userData.password,
+    //   createdAt: new Date().toISOString(),
+    // };
 
     users.push(newUser);
     this.saveUsers(users);
@@ -67,7 +93,7 @@ const authService = {
       return { success: false, message: 'Usuario o correo no encontrado.' };
     }
 
-    if (user.password !== password) {
+    if (user.contrasena !== password) {
       return { success: false, message: 'Contraseña incorrecta.' };
     }
 
@@ -78,17 +104,16 @@ const authService = {
   getUserForSession(user) {
     return {
       id: user.id,
-      nombre: user.nombre,
+      nombreCompleto: user.nombreCompleto,
       identificacion: user.identificacion,
       usuario: user.usuario,
       email: user.email,
-      telefono: user.telefono,
-      createdAt: user.createdAt,
+      celular: user.celular,
     };
   },
 
-  logout() {
-    this.clearSession();
+  logout(userId = null) {
+    this.clearSession(userId);
     return { success: true, message: 'Sesión cerrada.' };
   },
 };

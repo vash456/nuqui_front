@@ -1,4 +1,4 @@
-import authService from "../services/authService.js";  
+import { Cliente } from "../models/Cliente.js"; 
 import uiService from "../services/uiService.js";
 
 const loginForm = document.querySelector('#loginForm');
@@ -12,7 +12,8 @@ loginForm?.addEventListener('submit', event => {
     const identifier = formData.get('identifier')?.toString().trim() || '';
     const password = formData.get('password')?.toString() || '';
 
-    const result = authService.login(identifier, password);
+    const cliente = new Cliente(); // Crear una instancia de Cliente para usar el método autenticar
+    const result = cliente.autenticar(identifier, password);
 
     if (!result.success) {
         uiService.showMessage(messageBox, result.message);
