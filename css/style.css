@@ -262,6 +262,15 @@ h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weig
 .action-card i { font-size: 28px; color: var(--primary-gold); }
 .action-card h4 { margin-bottom: 2px; }
 
+.info-note-box {
+    background: rgba(255, 179, 0, 0.1);
+    border-left: 4px solid var(--primary-gold);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 30px 0;
+}
+
+
 /* FOOTER (Diseño de la imagen) */
 .main-footer {
     border-top: 1px solid var(--border-color);
