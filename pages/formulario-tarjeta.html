@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información Financiera - ASTRO</title>
+    <link rel="stylesheet" href="../css/formulario-tarjeta.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <div class="nav-links">
+            <a href="dashboard.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
+            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="transfer-wrapper">
+            <a href="tarjetas.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver a Selección
+            </a>
+            
+            <header class="dashboard-header">
+                <h1>Solicitar Tarjeta de Crédito</h1>
+                <p class="subtitle">Completa tu información</p>
+            </header>
+
+           <div class="steps-wrapper">
+            <div class="step-item">
+                <span class="step-circle">1</span>
+                <span class="step-text">Selección</span>
+            </div>
+            <div class="step-divider active"></div>
+            <div class="step-item active">
+                <span class="step-circle">2</span>
+                <span class="step-text">Información</span>
+            </div>
+        </div>
+
+            <section class="auth-card">
+                <h2 class="card-form-title">Información Financiera</h2>
+                
+                <form id="cardForm">
+                    <div class="input-group">
+                        <label>Ingresos Mensuales</label>
+                        <select class="dark-input select-custom" required>
+                            <option selected disabled>Selecciona un rango</option>
+                            <option>Menos de $1.200.000</option>
+                            <option>$1.200.000 - $2.500.000</option>
+                            <option>$2.500.000 - $4.000.000</option>
+                            <option>Más de $4.000.000</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Situación Laboral</label>
+                        <select class="dark-input select-custom">
+                            <option selected disabled>Selecciona una opción</option>
+                            <option>Empleado</option>
+                            <option>Autónomo / Freelance</option>
+                            <option>Pensionado</option>
+                            <option>Estudiante</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Límite de Crédito Solicitado</label>
+                        <select class="dark-input select-custom">
+                            <option selected disabled>Selecciona un límite</option>
+                            <option>Hasta $1.000.000</option>
+                            <option>$1.000.000 - $5.000.000</option>
+                            <option>$5.000.000 - $10.000.000</option>
+                        </select>
+                    </div>
+
+                    <div class="info-note-box">
+                        <p><strong>Nota:</strong> El límite final será determinado tras el análisis de tu perfil crediticio. Esta información es confidencial y está protegida.</p>
+                    </div>
+
+                    <button type="submit" class="btn primary full-width btn-submit-request">
+                        Enviar Solicitud <i class="fas fa-chevron-right"></i>
+                    </button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-star"></i> ASTRO</div>
+            <div class="security-seal">
+                <i class="fas fa-shield-halved"></i>
+                <span>Seguridad Bancaria Garantizada</span>
+            </div>
+            <p class="copyright">© 2026 ASTRO Bank. Todos los derechos reservados.</p>
+            <div class="footer-links">
+                <a href="privacidad.html">Privacidad</a> <a href="términos.html">Términos</a> <a href="contacto.html">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/pages/formulario-tarjeta.js"></script>
+</body>
+</html>

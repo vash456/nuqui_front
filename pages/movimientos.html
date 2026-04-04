@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimientos - ASTRO</title>
+    <link rel="stylesheet" href="../css/movimientos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <div class="nav-links">
+            <a href="dashboard.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
+            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="movements-wrapper">
+            <a href="dashboard.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver al Panel
+            </a>
+            
+            <header class="dashboard-header">
+                <h1>Movimientos</h1>
+                <p class="subtitle">Historial de todas tus transacciones</p>
+            </header>
+
+            <div class="filters-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar por concepto..." class="search-input">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-list"></i> Todos
+                    </button>
+                    <button class="filter-btn" data-filter="cuenta-corriente">
+                        <i class="fas fa-university"></i> Cuenta Corriente
+                    </button>
+                    <button class="filter-btn" data-filter="tarjeta-credito">
+                        <i class="fas fa-credit-card"></i> Tarjeta de Crédito
+                    </button>
+                    <button class="filter-btn" data-filter="cuenta-ahorros">
+                        <i class="fas fa-piggy-bank"></i> Cuenta de Ahorros
+                    </button>
+                </div>
+            </div>
+
+            <section class="movements-list">
+                <div class="movement-item">
+                    <div class="movement-icon expense">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>
+                    <div class="movement-details">
+                        <h3 class="movement-name">Supermercado Central</h3>
+                        <p class="movement-date">11 Mar 2025 - Crédito</p>
+                    </div>
+                    <div class="movement-amount expense-text">$125.000</div>
+                </div>
+
+                <div class="movement-item">
+                    <div class="movement-icon expense">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>
+                    <div class="movement-details">
+                        <h3 class="movement-name">Netflix Suscripción</h3>
+                        <p class="movement-date">10 Mar 2025 - Crédito</p>
+                    </div>
+                    <div class="movement-amount expense-text">$15.750</div>
+                </div>
+
+                <div class="movement-item">
+                    <div class="movement-icon expense">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>
+                    <div class="movement-details">
+                        <h3 class="movement-name">Gasolinera Shell</h3>
+                        <p class="movement-date">10 Mar 2025 - Crédito</p>
+                    </div>
+                    <div class="movement-amount expense-text">$65.000</div>
+                </div>
+
+                <div class="movement-item">
+                    <div class="movement-icon income">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="movement-details">
+                        <h3 class="movement-name">Devolución Compra Online</h3>
+                        <p class="movement-date">09 Mar 2025 - Crédito</p>
+                    </div>
+                    <div class="movement-amount income-text">+ €99.99</div>
+                </div>
+
+                <div class="movement-item">
+                    <div class="movement-icon expense">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>
+                    <div class="movement-details">
+                        <h3 class="movement-name">Restaurante La Estrella</h3>
+                        <p class="movement-date">11 Mar 2025 - Crédito</p>
+                    </div>
+                    <div class="movement-amount expense-text">€75.30</div>
+                </div>
+            </section>
+
+            <section class="summary-section">
+                <div class="summary-card income-summary">
+                    <p class="summary-label">Total Ingresos</p>
+                    <p class="summary-amount income-text">€3885,19</p>
+                </div>
+
+                <div class="summary-card expense-summary">
+                    <p class="summary-label">Total Egresos</p>
+                    <p class="summary-amount expense-text">€281,79</p>
+                </div>
+
+                <div class="summary-card balance-summary">
+                    <p class="summary-label">Balance Neto</p>
+                    <p class="summary-amount balance-text">€3103,40</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-star"></i> ASTRO</div>
+            <div class="security-seal">
+                <i class="fas fa-shield-halved"></i>
+                <span>Seguridad Bancaria Garantizada</span>
+            </div>
+            <p class="copyright">© 2026 ASTRO Bank. Todos los derechos reservados.</p>
+            <div class="footer-links">
+                <a href="privacidad.html">Privacidad</a> <a href="términos.html">Términos</a> <a href="contacto.html">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/pages/movimientos.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto - ASTRO</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/contacto.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body class="contact-body">
+    <nav class="navbar">
+      <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
+      <div class="nav-links">
+        <a href="dashboard.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
+        <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+      </div>
+    </nav>
+
+    <main class="contact-container">
+      <header class="contact-header">
+        <h1>Contacto</h1>
+        <p class="subtitle">Ponte en contacto con nuestro equipo de soporte</p>
+      </header>
+
+      <section class="contact-content">
+        <div class="contact-form-container">
+          <div class="form-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <form class="contact-form" id="contactForm">
+            <div class="input-wrapper">
+              <i class="fas fa-envelope"></i>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Tu correo electrónico"
+                required
+              />
+            </div>
+            <div class="input-wrapper">
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Describe tu motivo de contacto"
+                rows="6"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-paper-plane"></i> Enviar Mensaje
+            </button>
+          </form>
+          <div class="contact-info">
+            <p><i class="fas fa-clock"></i> Horario de atención: Lunes a Viernes, 9:00 - 18:00</p>
+            <p><i class="fas fa-phone"></i> Teléfono: +57 1 234 5678</p>
+            <p><i class="fas fa-map-marker-alt"></i> Dirección: Calle 123, Bogotá, Colombia</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <p class="copyright">
+          © 2026 ASTRO Bank. Todos los derechos reservados.
+        </p>
+        <div class="footer-links">
+          <a href="privacidad.html">Privacidad</a>
+          <a href="términos.html">Términos</a>
+          <a href="contacto.html">Contacto</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

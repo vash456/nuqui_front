@@ -12,8 +12,9 @@
     <nav class="navbar">
         <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
         <div class="nav-links">
+            <a href="dashboard.html"><i class="fas fa-home"></i> Inicio</a>
             <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
-            <a href="index.html"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
         </div>
     </nav>
 
@@ -40,7 +41,7 @@
 
         <div class="cards-display-grid">
             
-            <div class="card-selection-item">
+            <div class="card-selection-item" data-card="classic">
                 <div class="card-top classic-bg">
                     <div class="card-design-circle"></div>
                     <i class="fas fa-credit-card card-icon-main"></i>
@@ -60,7 +61,7 @@
                 </div>
             </div>
 
-            <div class="card-selection-item featured">
+            <div class="card-selection-item featured" data-card="gold">
                 <div class="recommended-pill">RECOMENDADA</div>
                 <div class="card-top gold-bg">
                     <div class="card-design-circle"></div>
@@ -82,7 +83,7 @@
                 </div>
             </div>
 
-            <div class="card-selection-item">
+            <div class="card-selection-item" data-card="platinum">
                 <div class="card-top platinum-bg">
                     <div class="card-design-circle"></div>
                     <i class="fas fa-chart-line card-icon-main"></i>
@@ -128,7 +129,8 @@
         </section>
 
         <div class="cta-section">
-            <button class="btn primary btn-large">Continuar con la Solicitud <i class="fas fa-chevron-right"></i></button>
+            <button id="continueBtn" class="btn primary btn-large">Continuar con la Solicitud <i class="fas fa-chevron-right"></i></button>
+            <p id="validationMessage" style="display: none; color: #ef4444; text-align: center; margin-top: 15px; font-size: 14px;">Por favor selecciona una tarjeta para continuar</p>
         </div>
     </main>
 
@@ -146,12 +148,49 @@
         <p class="copyright">© 2026 ASTRO Bank. Todos los derechos reservados.</p>
         
         <div class="footer-links">
-            <a href="#">Privacidad</a>
-            <a href="#">Términos</a>
-            <a href="#">Contacto</a>
+            <a href="privacidad.html">Privacidad</a>
+            <a href="términos.html">Términos</a>
+            <a href="contacto.html">Contacto</a>
         </div>
     </div>
 </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cardItems = document.querySelectorAll('.card-selection-item');
+            const continueBtn = document.querySelector('#continueBtn');
+            const validationMessage = document.querySelector('#validationMessage');
+            let selectedCard = null;
+
+            // Manejar click en las tarjetas
+            cardItems.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Remover selección anterior
+                    cardItems.forEach(c => c.classList.remove('selected'));
+                    
+                    // Agregar selección a la tarjeta clickeada
+                    card.classList.add('selected');
+                    selectedCard = card.dataset.card;
+                    
+                    // Ocultar mensaje de validación
+                    validationMessage.style.display = 'none';
+                });
+            });
+
+            // Manejar click en el botón continuar
+            continueBtn.addEventListener('click', () => {
+                if (!selectedCard) {
+                    // Mostrar mensaje de validación
+                    validationMessage.style.display = 'block';
+                } else {
+                    // Guardar la tarjeta seleccionada en sessionStorage
+                    sessionStorage.setItem('selectedCard', selectedCard);
+                    // Redirigir al formulario
+                    window.location.href = 'formulario-tarjeta.html';
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
