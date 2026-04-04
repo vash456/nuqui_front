@@ -30,24 +30,24 @@
             <div class="profile-main">
                 <section class="card profile-section">
                     <h3 class="section-title"><i class="fas fa-user icon-gold"></i> Información Personal</h3>
-                    <form>
+                    <form id="profileForm">
                         <div class="input-group">
                             <label>Nombre Completo</label>
-                            <input type="text" value="Juan Pérez García" class="dark-input">
+                            <input id="profileName" type="text" value="Juan Pérez García" class="dark-input" required>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
                                 <label>Email</label>
                                 <div class="input-wrapper">
                                     <i class="far fa-envelope"></i>
-                                    <input type="email" value="demo@astro.bank" class="dark-input">
+                                    <input id="profileEmail" type="email" value="demo@astro.bank" class="dark-input" required>
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Teléfono</label>
                                 <div class="input-wrapper">
                                     <i class="fas fa-phone-alt"></i>
-                                    <input type="tel" value="+57 612 345 6785" class="dark-input">
+                                    <input id="profilePhone" type="tel" value="+57 612 345 6785" class="dark-input" required>
                                 </div>
                             </div>
                         </div>
@@ -55,16 +55,17 @@
                             <label>Dirección</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <input type="text" value="Calle Gran Vía, 28, Madrid, España" class="dark-input">
+                                <input id="profileAddress" type="text" value="Calle Gran Vía, 28, Madrid, España" class="dark-input" required>
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Fecha de Nacimiento</label>
-                            <input type="date" value="1990-05-15" class="dark-input">
+                            <input id="profileBirthdate" type="date" value="1990-05-15" class="dark-input">
                         </div>
                         <button type="submit" class="btn primary full-width">
                             <i class="fas fa-save"></i> Guardar Cambios
                         </button>
+                        <p id="saveMessage" class="form-message success" style="display: none; margin-top: 20px;">Tus cambios se guardaron correctamente.</p>
                     </form>
                 </section>
 
@@ -138,5 +139,6 @@
             </div>
         </div>
     </footer>
+    <script src="../js/pages/perfil.js"></script>
 </body>
 </html>
