@@ -13,13 +13,11 @@ const authService = {
   getUserForSession(user) {
     return {
       id: user.id,
-      nombre: user.nombreCompleto || user.nombre,
+      nombreCompleto: user.nombreCompleto,
       identificacion: user.identificacion,
       usuario: user.usuario,
       email: user.email,
-      telefono: user.celular || user.telefono,
-      fechaNacimiento: user.fechaNacimiento,
-      createdAt: user.createdAt,
+      celular: user.celular,
     };
   },
 
@@ -64,17 +62,6 @@ const authService = {
       userData.password
     );
 
-    // const newUser = {
-    //   id: Date.now().toString(),
-    //   nombre: userData.nombre.trim(),
-    //   identificacion: userData.identificacion.trim(),
-    //   usuario: userData.usuario.trim(),
-    //   email: userData.email.trim().toLowerCase(),
-    //   telefono: userData.telefono ? userData.telefono.trim() : '',
-    //   password: userData.password,
-    //   createdAt: new Date().toISOString(),
-    // };
-
     users.push(newUser);
     this.saveUsers(users);
 
@@ -99,17 +86,6 @@ const authService = {
 
     this.saveSession(this.getUserForSession(user));
     return { success: true, message: 'Login exitoso.', user: user.usuario };
-  },
-
-  getUserForSession(user) {
-    return {
-      id: user.id,
-      nombreCompleto: user.nombreCompleto,
-      identificacion: user.identificacion,
-      usuario: user.usuario,
-      email: user.email,
-      celular: user.celular,
-    };
   },
 
   logout(userId = null) {

@@ -1,6 +1,7 @@
 ﻿const STORAGE_KEYS = {
   USERS: 'astro_users',
   SESSION_PREFIX: 'session_',
+  PRODUCTOS_CLIENTE: 'productos_clientes'
 };
 
 const localStorageService = {
@@ -55,6 +56,15 @@ const localStorageService = {
       }
     }
   },
+
+  guardarProductosClientes(productos) {
+    this.setItem(STORAGE_KEYS.PRODUCTOS_CLIENTE, productos);
+  },
+
+  obtenerProductosClientes() {
+    return this.getItem(STORAGE_KEYS.PRODUCTOS_CLIENTE) ?? [];
+  }
+
 };
 
 export default localStorageService;

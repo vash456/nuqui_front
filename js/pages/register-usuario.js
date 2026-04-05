@@ -1,5 +1,6 @@
 import authService from '../services/authService.js';
 import uiService from '../services/uiService.js';
+import iniciarProductosService from '../services/iniciarProductosService.js';
 
 const registerForm = document.querySelector('#registerForm');
 const messageBox = document.querySelector('#registerMessage');
@@ -46,6 +47,10 @@ registerForm?.addEventListener('submit', event => {
     uiService.showMessage(messageBox, result.message);
     return;
   }
+
+  // Inicializar productos para el nuevo usuario
+  iniciarProductosService.inicializarProductosCliente(result.user);
+  
 
   uiService.showMessage(messageBox, result.message, 'success');
   setTimeout(() => {
