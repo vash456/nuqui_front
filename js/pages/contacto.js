@@ -1,3 +1,5 @@
+import uiService from '../services/uiService.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.querySelector('#contactForm');
 
@@ -15,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'mensaje-enviado.html';
         });
     }
-import uiService from '../services/uiService.js';
+});
 
 // Validar sesión al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
