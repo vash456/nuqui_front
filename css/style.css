@@ -78,6 +78,13 @@ body {
     transform: translateY(-2px);
 }
 
+.btn-crear {
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+  text-align: center;
+}
+
 .outline {
     background: transparent;
     border: 2px solid var(--primary-gold);

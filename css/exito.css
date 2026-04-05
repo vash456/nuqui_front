@@ -85,6 +85,13 @@
     }
 }
 
+.btn-large {
+    display: block;
+    width: 100%;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .success-wrapper {
