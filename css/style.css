@@ -78,6 +78,16 @@ body {
     transform: translateY(-2px);
 }
 
+.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 .btn-crear {
   display: block;
   width: max-content;
@@ -448,6 +458,30 @@ h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weig
 @media (max-width: 900px) {
     .profile-layout { grid-template-columns: 1fr; }
     .input-row { grid-template-columns: 1fr; }
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    padding: 0;
+}
+
+.btn-link:hover h4 {
+    color: var(--primary-gold);
+}
+
+.change-password-form {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.change-password-form .input-group {
+    margin-bottom: 15px;
 }
 
 /* =========================================

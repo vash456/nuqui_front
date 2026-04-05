@@ -116,6 +116,26 @@ const authService = {
     this.clearSession(userId);
     return { success: true, message: 'Sesión cerrada.' };
   },
+
+  updatePassword(userId, oldPassword, newPassword) {
+    const users = this.getUsers();
+    const userIndex = users.findIndex(user => user.id === userId);
+
+    if (userIndex === -1) {
+      return { success: false, message: 'Usuario no encontrado.' };
+    }
+
+    const user = users[userIndex];
+
+    if (user.contrasena !== oldPassword) {
+      return { success: false, message: 'La contraseña actual es incorrecta.' };
+    }
+
+    user.contrasena = newPassword;
+    this.saveUsers(users);
+
+    return { success: true, message: 'Contraseña actualizada correctamente.' };
+  },
 };
 
 export default authService;

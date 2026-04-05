@@ -113,8 +113,38 @@
                 <div class="card profile-section">
                     <h3 class="section-title"><i class="fas fa-shield-alt icon-gold"></i> Seguridad</h3>
                     <div class="security-item">
-                        <h4>Cambiar Contraseña</h4>
-                        <p>Actualiza tu contraseña</p>
+                        <button type="button" id="changePasswordBtn" class="btn-link">
+                            <h4>Cambiar Contraseña</h4>
+                            <p>Actualiza tu contraseña</p>
+                        </button>
+                    </div>
+                    <div id="changePasswordForm" class="change-password-form" style="display: none;">
+                        <form id="passwordForm">
+                            <div class="input-group">
+                                <label>Contraseña Actual</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="currentPassword" placeholder="Contraseña actual" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Nueva Contraseña</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="newPassword" placeholder="Nueva contraseña" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Confirmar Nueva Contraseña</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="confirmPassword" placeholder="Confirmar nueva contraseña" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn primary">Cambiar Contraseña</button>
+                            <button type="button" id="cancelChangePassword" class="btn secondary">Cancelar</button>
+                            <p id="passwordMessage" class="form-message" style="display: none; margin-top: 20px;"></p>
+                        </form>
                     </div>
                     <div class="security-item">
                         <h4>Autenticación de Dos Factores</h4>
@@ -140,6 +170,6 @@
             </div>
         </div>
     </footer>
-    <script src="../js/pages/perfil.js"></script>
+    <script type="module" src="../js/pages/perfil.js"></script>
 </body>
 </html>
