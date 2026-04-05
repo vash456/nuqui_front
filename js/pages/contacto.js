@@ -15,4 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'mensaje-enviado.html';
         });
     }
+import uiService from '../services/uiService.js';
+
+// Validar sesión al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+  uiService.checkSession();
+});
+
+// Manejar cierre de sesión
+const logoutLink = document.querySelector('#logoutLink');
+logoutLink?.addEventListener('click', event => {
+  event.preventDefault();
+  uiService.manageLogoutLink();
 });
