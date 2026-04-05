@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   uiService.checkSession();
 });
 
-// Manejar cierre de sesión
-const logoutLink = document.querySelector('#logoutLink');
+// Ocultar/mostrar balance
 const eyeIcon = document.querySelector('.eye-icon');
 const balanceAmount = document.querySelector('.balance-info h2');
 const cardAmounts = document.querySelectorAll('.account-card .amount');
@@ -17,6 +16,8 @@ let balanceVisible = true;
 const originalBalance = balanceAmount?.textContent || '$43,871.25';
 const originalAmounts = Array.from(cardAmounts).map(el => el.textContent);
 
+// Manejar cierre de sesión
+const logoutLink = document.querySelector('#logoutLink');
 logoutLink?.addEventListener('click', event => {
   event.preventDefault();
   uiService.manageLogoutLink();
