@@ -1,5 +1,5 @@
 import authService from '../services/authService.js';
-
+import sesionService from '../services/sesionService.js';
 import uiService from '../services/uiService.js';
 
 // Validar sesión al cargar la página
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const currentUser = authService.getCurrentUser();
+                const currentUser = sesionService.getCurrentUser();
                 if (!currentUser || !currentUser.id) {
                     showPasswordMessage('No se pudo identificar al usuario actual.', 'error');
                     return;

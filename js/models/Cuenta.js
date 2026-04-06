@@ -24,6 +24,10 @@ export class Cuenta {
   }
 
   registrarMovimiento(movimiento) {
-    throw new Error('Metodo no implementado');
+    if (!movimiento || typeof movimiento !== 'object') {
+      throw new Error('Movimiento inválido');
+    }
+    this.movimientos.push(movimiento);
+
   }
 }

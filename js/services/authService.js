@@ -1,5 +1,6 @@
 ﻿import localStorageService from '../storage/localstorage.js';
 import { Cliente } from '../models/Cliente.js';
+import sesionService from './sesionService.js';
 
 const authService = {
   getUsers() {
@@ -8,30 +9,6 @@ const authService = {
 
   saveUsers(users) {
     localStorageService.saveUsers(users);
-  },
-
-  getUserForSession(user) {
-    return {
-      id: user.id,
-      nombreCompleto: user.nombreCompleto,
-      identificacion: user.identificacion,
-      usuario: user.usuario,
-      email: user.email,
-      celular: user.celular,
-    };
-  },
-
-  getCurrentUser() {
-    return localStorageService.getCurrentSession();
-  },
-
-  saveSession(user) {
-    const safeUser = this.getUserForSession(user);
-    localStorageService.saveSession(safeUser);
-  },
-
-  clearSession() {
-    localStorageService.clearSession();
   },
 
   register(userData) {
@@ -84,12 +61,12 @@ const authService = {
       return { success: false, message: 'Contraseña incorrecta.' };
     }
 
-    this.saveSession(this.getUserForSession(user));
+    sesionService.saveSession(sesionService.getUserForSession(user));
     return { success: true, message: 'Login exitoso.', user: user.usuario };
   },
 
-  logout(userId = null) {
-    this.clearSession(userId);
+  logout(userId) {
+    sesionService.clearSession(userId);
     return { success: true, message: 'Sesión cerrada.' };
   },
 

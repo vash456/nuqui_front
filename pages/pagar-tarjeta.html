@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar Tarjeta - ASTRO</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pagar-tarjeta.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="nav-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <div class="nav-links">
+            <a href="dashboard.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="perfil.html"><i class="far fa-user-circle"></i> Mi Perfil</a>
+            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="transfer-wrapper">
+            <a href="dashboard.html" class="back-link">← Volver al Panel</a>
+
+            <header class="dashboard-header" style="text-align: center;">
+                <h1 class="text-gold"><i class="fas fa-credit-card"></i> Pagar Tarjeta de Crédito</h1>
+                <p class="subtitle">Paga el saldo de tu tarjeta de forma segura</p>
+            </header>
+
+            <div class="auth-card">
+                <form id="pagarForm">
+                    <div class="input-group">
+                        <label>Seleccionar Tarjeta</label>
+                        <select id="tarjetaSelect" class="dark-input select-custom" required>
+                            <option value="">Seleccione una tarjeta...</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Monto a Pagar</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-dollar-sign"></i>
+                            <input type="number" id="monto" placeholder="0.00" min="0" step="0.01" class="dark-input" required>
+                        </div>
+                    </div>
+
+                    <div id="tarjetaInfo" class="tarjeta-info" style="display: none;">
+                        <div class="balance-display">
+                            <div class="info-row">
+                                <span class="label">Deuda Actual:</span>
+                                <span class="amount" id="deudaActual">$0.00</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Cupo Disponible:</span>
+                                <span class="amount" id="cupoDisponible">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn primary">
+                        <i class="fas fa-credit-card"></i> Pagar Tarjeta
+                    </button>
+                </form>
+
+                <div id="message" class="message" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-logo"><i class="fas fa-star"></i> ASTRO</div>
+        <p class="copyright">
+          © 2026 ASTRO Bank. Todos los derechos reservados.
+        </p>
+        <div class="footer-links">
+          <a href="privacidad.html">Privacidad</a>
+          <a href="términos.html">Términos</a>
+          <a href="contacto.html">Contacto</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="../js/pages/pagar-tarjeta.js"></script>
+</body>
+</html>

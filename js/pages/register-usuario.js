@@ -49,8 +49,11 @@ registerForm?.addEventListener('submit', event => {
   }
 
   // Inicializar productos para el nuevo usuario
-  iniciarProductosService.inicializarProductosCliente(result.user);
-  
+  try {
+    iniciarProductosService.inicializarProductosCliente(result.user);
+  } catch (error) {
+    console.error('Error al inicializar productos del cliente:', error);
+  }
 
   uiService.showMessage(messageBox, result.message, 'success');
   setTimeout(() => {

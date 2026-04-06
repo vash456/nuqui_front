@@ -1,5 +1,3 @@
-import { Cliente } from '../models/Cliente.js';
-import authService from '../services/authService.js';
 import uiService from '../services/uiService.js';
 
 // Validar sesión al cargar la página

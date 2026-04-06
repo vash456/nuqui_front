@@ -1,0 +1,43 @@
+@import 'style.css';
+
+/* =========================================
+   RETIRAR DINERO - CLASES ESPECÍFICAS
+   ========================================= */
+
+.transfer-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cuenta-info {
+    background: rgba(255, 179, 0, 0.1);
+    border: 1px solid var(--primary-gold);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.balance-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.balance-display .label {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.balance-display .amount {
+    color: var(--primary-gold);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .transfer-wrapper {
+        padding: 10px;
+    }
+}

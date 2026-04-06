@@ -1,4 +1,5 @@
 import authService from './authService.js';
+import sesionService from './sesionService.js';
 import { Cliente } from '../models/Cliente.js';
 
 const uiService = {
@@ -27,7 +28,7 @@ const uiService = {
   },
 
   checkSession(redirectUrl = 'login.html') {
-    const currentUser = authService.getCurrentUser();
+    const currentUser = sesionService.getCurrentUser();
     if (!currentUser) {
       window.location.href = redirectUrl;
       return false;
@@ -36,7 +37,7 @@ const uiService = {
   },
 
   manageLogoutLink(redirectUrl = 'login.html') {
-    const currentUser = authService.getCurrentUser();
+    const currentUser = sesionService.getCurrentUser();
     if (currentUser) {
       const cliente = new Cliente(
         currentUser.id,
