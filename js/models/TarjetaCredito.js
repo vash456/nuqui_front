@@ -4,28 +4,29 @@ import { TipoMovimiento } from './TipoMovimiento.js';
 
 export class TarjetaCredito extends Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado, cupo, deuda, numeroCuotas) {
-    super(numeroCuenta, saldo, fechaApertura, estado);
-    this.cupo = cupo;
-    this.deuda = deuda;
+    super(numeroCuenta, Number(saldo) || 0, fechaApertura, estado);
+    this.cupo = Number(cupo) || 0;
+    this.deuda = Number(deuda) || 0;
     this.numeroCuotas = numeroCuotas;
   }
 
   comprar(monto, cuotas = 1) {
-    if (monto <= 0) {
+    const valor = Number(monto);
+    if (!Number.isFinite(valor) || valor <= 0) {
       return { success: false, message: 'El monto de compra debe ser mayor a cero' };
     }
-    if (this.deuda + monto > this.cupo) {
+    if (this.deuda + valor > this.cupo) {
       return { success: false, message: 'Compra excede el cupo disponible' };
     }
-    this.deuda += monto;
+    this.deuda += valor;
 
-    // Registrar movimiento
     const movimiento = new Movimiento(
+      this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.COMPRA,
-      monto,
+      valor,
       this.deuda,
-      `Compra de ${monto} en ${cuotas} cuotas`
+      `Compra de ${valor} en ${cuotas} cuotas`
     );
     this.registrarMovimiento(movimiento);
 
@@ -33,21 +34,22 @@ export class TarjetaCredito extends Cuenta {
   }
 
   pagar(monto) {
-    if (monto <= 0) {
+    const valor = Number(monto);
+    if (!Number.isFinite(valor) || valor <= 0) {
       return { success: false, message: 'El monto a pagar debe ser mayor a cero' };
     }
-    if (monto > this.deuda) {
+    if (valor > this.deuda) {
       return { success: false, message: 'El monto excede la deuda actual' };
     }
-    this.deuda -= monto;
+    this.deuda -= valor;
 
-    // Registrar movimiento
     const movimiento = new Movimiento(
+      this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.PAGO,
-      monto,
+      valor,
       this.deuda,
-      `Pago de ${monto}`
+      `Pago de ${valor}`
     );
     this.registrarMovimiento(movimiento);
 

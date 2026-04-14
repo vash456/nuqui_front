@@ -4,26 +4,32 @@ import { TipoMovimiento } from './TipoMovimiento.js';
 
 export class CuentaAhorros extends Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado, tasaInteres) {
-    super(numeroCuenta, saldo, fechaApertura, estado);
+    super(numeroCuenta, Number(saldo) || 0, fechaApertura, estado);
     this.tasaInteres = tasaInteres;
   }
 
+  consultarSaldo() {
+    return Number(this.saldo) || 0;
+  }
+
   retirar(monto) {
-    if (monto <= 0) {
+    const valor = Number(monto);
+    if (!Number.isFinite(valor) || valor <= 0) {
       return { success: false, message: 'El monto a retirar debe ser mayor a cero' };
     }
-    if (monto > this.saldo) {
+    if (valor > this.saldo) {
       return { success: false, message: 'Fondos insuficientes' };
     }
-    this.saldo -= monto;
 
-    // Registrar movimiento
+    this.saldo -= valor;
+
     const movimiento = new Movimiento(
+      this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.RETIRO,
-      monto,
+      valor,
       this.saldo,
-      `Retiro de ${monto}`
+      `Retiro de ${valor}`
     );
     this.registrarMovimiento(movimiento);
 
@@ -31,18 +37,20 @@ export class CuentaAhorros extends Cuenta {
   }
 
   consignar(monto) {
-    if (monto <= 0) {
+    const valor = Number(monto);
+    if (!Number.isFinite(valor) || valor <= 0) {
       return { success: false, message: 'El monto a consignar debe ser mayor a cero' };
     }
-    this.saldo += monto;
 
-    // Registrar movimiento
+    this.saldo += valor;
+
     const movimiento = new Movimiento(
+      this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.CONSIGNACION,
-      monto,
+      valor,
       this.saldo,
-      `Consignación de ${monto}`
+      `Consignación de ${valor}`
     );
     this.registrarMovimiento(movimiento);
 
@@ -53,8 +61,8 @@ export class CuentaAhorros extends Cuenta {
     const intereses = this.calcularIntereses();
     this.saldo += intereses;
 
-    // Registrar movimiento
     const movimiento = new Movimiento(
+      this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.INTERESES,
       intereses,
@@ -67,7 +75,7 @@ export class CuentaAhorros extends Cuenta {
   }
 
   calcularIntereses() {
-    return (this.saldo * this.tasaInteres) / 100;
+    return (Number(this.saldo) * Number(this.tasaInteres)) / 100;
   }
 
   transferir(destino, cuenta, monto) {

@@ -1,4 +1,6 @@
 import { Cuenta } from './Cuenta.js';
+import { Movimiento } from './Movimiento.js';
+import { TipoMovimiento } from './TipoMovimiento.js';
 
 export class CuentaCorriente extends Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado, porcentajeSobregiro, limiteSobregiro) {
@@ -16,7 +18,17 @@ export class CuentaCorriente extends Cuenta {
     }
     this.saldo -= monto;
 
-    return { success: true, message: 'Retiro exitoso', data: { nuevoSaldo: this.saldo } };
+    // Registrar movimiento
+        const movimiento = new Movimiento(
+          new Date(),
+          TipoMovimiento.RETIRO,
+          monto,
+          this.saldo,
+          `Retiro de ${monto}`
+        );
+        this.registrarMovimiento(movimiento);
+    
+        return { success: true, message: 'Retiro exitoso', data: { nuevoSaldo: this.saldo } };
   }
 
   calcularLimiteSobregiro() {

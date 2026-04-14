@@ -1,33 +1,52 @@
-import { CuentaCorriente } from "../models/CuentaCorriente";
-import { CuentaAhorros } from "../models/CuentaAhorros";
-import { Movimiento } from "../models/Movimiento";
-import { TipoMovimiento } from "../models/TipoMovimiento";
+﻿import { CuentaCorriente } from '../models/CuentaCorriente.js';
+import { CuentaAhorros } from '../models/CuentaAhorros.js';
 
 const cuentaService = {
-    retirar(cuenta, monto, descripcion) {
-        if (cuenta instanceof CuentaCorriente || cuenta instanceof CuentaAhorros) {
-            throw new Error('La cuenta debe ser una instancia de CuentaCorriente o CuentaAhorros');
-        }
+  validarMonto(monto) {
+    const valor = Number(monto);
+    if (!Number.isFinite(valor) || valor <= 0) {
+      return { success: false, message: 'El monto debe ser un número mayor a cero' };
+    }
+    return { success: true, value: valor };
+  },
 
-        const resultado = cuenta.retirar(monto);
-        if (!resultado.success) {
-            return resultado; // Retornar el mensaje de error del método retirar
-        }
+  esCuentaValida(cuenta) {
+    return cuenta instanceof CuentaCorriente || cuenta instanceof CuentaAhorros;
+  },
 
-        // Registrar movimiento de retiro
-        const movimiento = new Movimiento(
-            this.movimientos.length + 1,     // id
-            new Date(),                      // fechaHora
-            TipoMovimiento.RETIRO,           // tipo (asumiendo existe)
-            monto,                           // valor
-            this.saldo,                      // saldoPosterior
-            descripcion                      // descripción
-        );
-        this.registrarMovimiento(movimiento);
-    
-   }     
+  retirar(cuenta, monto) {
+    if (!this.esCuentaValida(cuenta)) {
+      return { success: false, message: 'Cuenta inválida para retiro' };
+    }
 
+    const validation = this.validarMonto(monto);
+    if (!validation.success) return validation;
+
+    return cuenta.retirar(validation.value);
+  },
+
+  consignar(cuenta, monto) {
+    if (!this.esCuentaValida(cuenta)) {
+      return { success: false, message: 'Cuenta inválida para consignación' };
+    }
+
+    const validation = this.validarMonto(monto);
+    if (!validation.success) return validation;
+
+    return cuenta.consignar(validation.value);
+  },
+
+  obtenerSaldoDisponible(cuenta) {
+    if (!this.esCuentaValida(cuenta)) {
+      return 0;
+    }
+
+    if (cuenta instanceof CuentaCorriente) {
+      return Number(cuenta.saldo) + Number(cuenta.calcularLimiteSobregiro());
+    }
+
+    return Number(cuenta.saldo);
+  }
 };
 
 export default cuentaService;
-

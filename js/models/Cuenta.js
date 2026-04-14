@@ -1,14 +1,14 @@
 export class Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado) {
     this.numeroCuenta = numeroCuenta;
-    this.saldo = saldo;
+    this.saldo = Number(saldo) || 0;
     this.fechaApertura = fechaApertura;
     this.estado = estado;
     this.movimientos = [];
   }
 
   consultarSaldo() {
-    throw new Error('Metodo no implementado');
+    return Number(this.saldo) || 0;
   }
 
   consignar(monto) {
@@ -20,7 +20,7 @@ export class Cuenta {
   }
 
   obtenerMovimientos() {
-    throw new Error('Metodo no implementado');
+    return [...this.movimientos];
   }
 
   registrarMovimiento(movimiento) {
@@ -28,6 +28,5 @@ export class Cuenta {
       throw new Error('Movimiento inválido');
     }
     this.movimientos.push(movimiento);
-
   }
 }

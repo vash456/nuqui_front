@@ -43,13 +43,14 @@ registerForm?.addEventListener('submit', event => {
 
   const result = authService.register(userData);
 
-  if (!result.success) {
-    uiService.showMessage(messageBox, result.message);
-    return;
-  }
+  // if (!result.success) {
+  //   uiService.showMessage(messageBox, result.message);
+  //   return;
+  // }
 
   // Inicializar productos para el nuevo usuario
   try {
+    console.log("inicializando productos para el nuevo usuario");
     iniciarProductosService.inicializarProductosCliente(result.user);
   } catch (error) {
     console.error('Error al inicializar productos del cliente:', error);

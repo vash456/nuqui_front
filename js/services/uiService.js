@@ -7,12 +7,14 @@ const uiService = {
     if (!element) return;
     element.textContent = message;
     element.className = type === 'success' ? 'form-message success' : 'form-message error';
+    element.style.display = 'block';
   },
 
   clearMessage(element) {
     if (!element) return;
     element.textContent = '';
     element.className = 'form-message';
+    element.style.display = 'none';
   },
 
   showLoading(button, text = 'Cargando...') {

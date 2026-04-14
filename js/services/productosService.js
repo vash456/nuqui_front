@@ -1,4 +1,4 @@
-import localStorageService from '../storage/localstorage.js';
+﻿import localStorageService from '../storage/localstorage.js';
 import { ProductosCliente } from '../models/ProductosCliente.js';
 import { Cliente } from '../models/Cliente.js';
 import { CuentaAhorros } from '../models/CuentaAhorros.js';
@@ -6,7 +6,6 @@ import { CuentaCorriente } from '../models/CuentaCorriente.js';
 import { TarjetaCredito } from '../models/TarjetaCredito.js';
 
 const productosService = {
-  // Crear un ProductosCliente para un cliente existente
   crearProductosCliente(cliente) {
     if (!(cliente instanceof Cliente)) {
       throw new Error('Se requiere una instancia de Cliente');
@@ -14,10 +13,89 @@ const productosService = {
     return new ProductosCliente(cliente);
   },
 
-  // Guardar productos de un cliente en localStorage
+  construirCliente(clienteData) {
+    if (!clienteData) return null;
+    return new Cliente(
+      clienteData.id,
+      clienteData.identificacion,
+      clienteData.nombreCompleto,
+      clienteData.celular,
+      clienteData.usuario,
+      clienteData.email,
+      clienteData.fechaNacimiento,
+      clienteData.contrasena
+    );
+  },
+
+  construirCuenta(cuentaData) {
+    if (!cuentaData) return null;
+
+    if (cuentaData.cupo !== undefined && cuentaData.deuda !== undefined) {
+      const tarjeta = new TarjetaCredito(
+        cuentaData.numeroCuenta,
+        cuentaData.saldo,
+        cuentaData.fechaApertura,
+        cuentaData.estado,
+        cuentaData.cupo,
+        cuentaData.deuda,
+        cuentaData.numeroCuotas
+      );
+      tarjeta.movimientos = cuentaData.movimientos ?? [];
+      return tarjeta;
+    }
+
+    if (cuentaData.tasaInteres !== undefined) {
+      const ahorro = new CuentaAhorros(
+        cuentaData.numeroCuenta,
+        cuentaData.saldo,
+        cuentaData.fechaApertura,
+        cuentaData.estado,
+        cuentaData.tasaInteres
+      );
+      ahorro.movimientos = cuentaData.movimientos ?? [];
+      return ahorro;
+    }
+
+    if (cuentaData.limiteSobregiro !== undefined || cuentaData.porcentajeSobregiro !== undefined) {
+      const corriente = new CuentaCorriente(
+        cuentaData.numeroCuenta,
+        cuentaData.saldo,
+        cuentaData.fechaApertura,
+        cuentaData.estado,
+        cuentaData.porcentajeSobregiro,
+        cuentaData.limiteSobregiro
+      );
+      corriente.movimientos = cuentaData.movimientos ?? [];
+      return corriente;
+    }
+
+    return null;
+  },
+
+  construirProductosCliente(productosData) {
+    if (!productosData) return null;
+
+    const cliente = this.construirCliente(productosData.cliente);
+    if (!cliente) return null;
+
+    const productosCliente = new ProductosCliente(cliente);
+
+    (productosData.cuentas ?? []).forEach(cuentaData => {
+      const cuenta = this.construirCuenta(cuentaData);
+      if (cuenta) productosCliente.agregarCuenta(cuenta);
+    });
+
+    (productosData.tarjetas ?? []).forEach(tarjetaData => {
+      const tarjeta = this.construirCuenta(tarjetaData);
+      if (tarjeta) productosCliente.agregarTarjeta(tarjeta);
+    });
+
+    return productosCliente;
+  },
+
   guardarProductos(productosCliente) {
-    if (!(productosCliente instanceof ProductosCliente)) {
-      throw new Error('Se requiere una instancia de ProductosCliente');
+    if (!productosCliente || !productosCliente.cliente) {
+      throw new Error('Se requiere un ProductosCliente válido para guardar');
     }
 
     const productos = this.getAllProductos();
@@ -32,18 +110,18 @@ const productosService = {
     localStorageService.guardarProductosClientes(productos);
   },
 
-  // Obtener productos de un cliente por ID
   obtenerProductosCliente(clienteId) {
     const productos = this.getAllProductos();
     return productos.find(p => p.cliente.id === clienteId) || null;
   },
 
-  // Obtener todos los productos (para administración)
   getAllProductos() {
-    return localStorageService.obtenerProductosClientes() || [];
+    const rawProductos = localStorageService.obtenerProductosClientes() ?? [];
+    return rawProductos
+      .map(productosData => this.construirProductosCliente(productosData))
+      .filter(Boolean);
   },
 
-  // Crear y agregar una cuenta de ahorros a un cliente
   crearCuentaAhorros(clienteId, numeroCuenta, saldo, fechaApertura, estado, tasaInteres) {
     const productosCliente = this.obtenerProductosCliente(clienteId);
     if (!productosCliente) {
@@ -57,7 +135,6 @@ const productosService = {
     return cuenta;
   },
 
-  // Crear y agregar una cuenta corriente a un cliente
   crearCuentaCorriente(clienteId, numeroCuenta, saldo, fechaApertura, estado, porcentajeSobregiro, limiteSobregiro) {
     const productosCliente = this.obtenerProductosCliente(clienteId);
     if (!productosCliente) {
@@ -71,7 +148,6 @@ const productosService = {
     return cuenta;
   },
 
-  // Crear y agregar una tarjeta de crédito a un cliente
   crearTarjetaCredito(clienteId, numeroCuenta, saldo, fechaApertura, estado, cupo, deuda, numeroCuotas) {
     const productosCliente = this.obtenerProductosCliente(clienteId);
     if (!productosCliente) {
@@ -85,13 +161,11 @@ const productosService = {
     return tarjeta;
   },
 
-  // Obtener resumen de productos de un cliente
   obtenerResumenCliente(clienteId) {
     const productosCliente = this.obtenerProductosCliente(clienteId);
     return productosCliente ? productosCliente.obtenerResumen() : null;
   },
 
-  // Listar todos los productos de un cliente
   listarProductosCliente(clienteId) {
     const productosCliente = this.obtenerProductosCliente(clienteId);
     if (!productosCliente) return { cuentas: [], tarjetas: [] };
