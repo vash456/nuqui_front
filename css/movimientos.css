@@ -151,10 +151,15 @@
     margin-bottom: 5px;
 }
 
-.movement-date {
+.movement-date,
+.movement-account {
     font-size: 12px;
     color: #666;
     margin: 0;
+}
+
+.movement-account {
+    margin-top: 4px;
 }
 
 .movement-amount {

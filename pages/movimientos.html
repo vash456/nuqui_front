@@ -51,77 +51,23 @@
                 </div>
             </div>
 
-            <section class="movements-list">
-                <div class="movement-item">
-                    <div class="movement-icon expense">
-                        <i class="fa-solid fa-minus"></i>
-                    </div>
-                    <div class="movement-details">
-                        <h3 class="movement-name">Supermercado Central</h3>
-                        <p class="movement-date">11 Mar 2025 - Crédito</p>
-                    </div>
-                    <div class="movement-amount expense-text">$125.000</div>
-                </div>
-
-                <div class="movement-item">
-                    <div class="movement-icon expense">
-                        <i class="fa-solid fa-minus"></i>
-                    </div>
-                    <div class="movement-details">
-                        <h3 class="movement-name">Netflix Suscripción</h3>
-                        <p class="movement-date">10 Mar 2025 - Crédito</p>
-                    </div>
-                    <div class="movement-amount expense-text">$15.750</div>
-                </div>
-
-                <div class="movement-item">
-                    <div class="movement-icon expense">
-                        <i class="fa-solid fa-minus"></i>
-                    </div>
-                    <div class="movement-details">
-                        <h3 class="movement-name">Gasolinera Shell</h3>
-                        <p class="movement-date">10 Mar 2025 - Crédito</p>
-                    </div>
-                    <div class="movement-amount expense-text">$65.000</div>
-                </div>
-
-                <div class="movement-item">
-                    <div class="movement-icon income">
-                        <i class="fas fa-plus"></i>
-                    </div>
-                    <div class="movement-details">
-                        <h3 class="movement-name">Devolución Compra Online</h3>
-                        <p class="movement-date">09 Mar 2025 - Crédito</p>
-                    </div>
-                    <div class="movement-amount income-text">+ €99.99</div>
-                </div>
-
-                <div class="movement-item">
-                    <div class="movement-icon expense">
-                        <i class="fa-solid fa-minus"></i>
-                    </div>
-                    <div class="movement-details">
-                        <h3 class="movement-name">Restaurante La Estrella</h3>
-                        <p class="movement-date">11 Mar 2025 - Crédito</p>
-                    </div>
-                    <div class="movement-amount expense-text">€75.30</div>
-                </div>
-            </section>
+            <section class="movements-list" id="movementsList"></section>
+            <div id="noMovements" class="no-movements" style="display:none; text-align:center; color:#aaa; margin-top:20px;">No se encontraron movimientos para este filtro.</div>
 
             <section class="summary-section">
                 <div class="summary-card income-summary">
                     <p class="summary-label">Total Ingresos</p>
-                    <p class="summary-amount income-text">€3885,19</p>
+                    <p class="summary-amount income-text" id="summaryIncome">$0.00</p>
                 </div>
 
                 <div class="summary-card expense-summary">
                     <p class="summary-label">Total Egresos</p>
-                    <p class="summary-amount expense-text">€281,79</p>
+                    <p class="summary-amount expense-text" id="summaryExpense">$0.00</p>
                 </div>
 
                 <div class="summary-card balance-summary">
                     <p class="summary-label">Balance Neto</p>
-                    <p class="summary-amount balance-text">€3103,40</p>
+                    <p class="summary-amount balance-text" id="summaryBalance">$0.00</p>
                 </div>
             </section>
         </div>

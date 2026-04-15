@@ -20,6 +20,7 @@ export class CuentaCorriente extends Cuenta {
 
     // Registrar movimiento
         const movimiento = new Movimiento(
+          this.movimientos.length + 1,
           new Date(),
           TipoMovimiento.RETIRO,
           monto,
@@ -43,6 +44,7 @@ export class CuentaCorriente extends Cuenta {
 
     // Registrar movimiento
     const movimiento = new Movimiento(
+      this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.CONSIGNACION,
       monto,
