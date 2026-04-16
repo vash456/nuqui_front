@@ -63,6 +63,16 @@ const localStorageService = {
 
   obtenerProductosClientes() {
     return this.getItem(STORAGE_KEYS.PRODUCTOS_CLIENTE) ?? [];
+  },
+
+  existeNumeroCuenta(numeroCuenta) {
+    if (!numeroCuenta) return false;
+    const productos = this.obtenerProductosClientes();
+    return productos.some(productosCliente => {
+      const cuentas = productosCliente.cuentas ?? [];
+      const tarjetas = productosCliente.tarjetas ?? [];
+      return cuentas.some(c => c.numeroCuenta === numeroCuenta) || tarjetas.some(t => t.numeroCuenta === numeroCuenta);
+    });
   }
 
 };

@@ -115,6 +115,25 @@ const productosService = {
     return productos.find(p => p.cliente.id === clienteId) || null;
   },
 
+  obtenerProductoPorNumeroCuenta(numeroCuenta) {
+    if (!numeroCuenta) return null;
+
+    const productos = this.getAllProductos();
+    for (const productosCliente of productos) {
+      const cuenta = productosCliente.obtenerCuenta(numeroCuenta);
+      if (cuenta) {
+        return { producto: cuenta, productosCliente };
+      }
+
+      const tarjeta = productosCliente.obtenerTarjeta(numeroCuenta);
+      if (tarjeta) {
+        return { producto: tarjeta, productosCliente };
+      }
+    }
+
+    return null;
+  },
+
   getAllProductos() {
     const rawProductos = localStorageService.obtenerProductosClientes() ?? [];
     return rawProductos

@@ -31,25 +31,30 @@
                 <form id="transferForm">
                     <div class="input-group">
                         <label>Desde mi cuenta</label>
-                        <select class="dark-input select-custom" required>
-                            <option>Cuenta Corriente - $12.850,75</option>
-                            <option>Cuenta de Ahorro - $25.600,00</option>
+                        <select id="origenSelect" class="dark-input select-custom" required>
+                            <option value="">Selecciona una cuenta o tarjeta</option>
                         </select>
+                    </div>
+
+                    <div id="origenInfo" class="info-box" style="display:none; margin-bottom: 1rem;">
+                        <p><strong id="origenSeleccionado"></strong></p>
+                        <p id="saldoOrigen"></p>
+                        <p id="detalleOrigen"></p>
                     </div>
 
                     <div class="input-group">
                         <label>Beneficiario</label>
                         <div class="input-wrapper">
                             <i class="far fa-user"></i>
-                            <input type="text" placeholder="Nombre del destinatario" class="dark-input" required>
+                            <input id="beneficiario" type="text" placeholder="Nombre del destinatario" class="dark-input" required>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label>Número de Cuenta</label>
+                        <label>Número de Cuenta / Tarjeta Destino</label>
                         <div class="input-wrapper">
                             <i class="fas fa-hashtag"></i>
-                            <input type="text" placeholder="# ES00 0000 0000 0000 0000 0000" class="dark-input" required>
+                            <input id="destinoCuenta" type="text" placeholder="# XX-0000000000000-000" class="dark-input" required>
                         </div>
                     </div>
 
@@ -57,7 +62,7 @@
                         <label>Cantidad</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-dollar-sign"></i>
-                            <input type="number" step="0.01" placeholder="0.00" class="dark-input" required>
+                            <input id="monto" type="number" step="0.01" placeholder="0.00" class="dark-input" required>
                             <span class="currency-tag">COP</span>
                         </div>
                     </div>
@@ -66,9 +71,11 @@
                         <label>Concepto (Opcional)</label>
                         <div class="input-wrapper" style="align-items: flex-start; position: relative;">
                             <i class="far fa-comment-alt" style="top: 15px;"></i>
-                            <textarea placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Descripción de la transferencia" class="dark-input" rows="3" style="padding-top: 12px; resize: none;"></textarea>
+                            <textarea id="descripcion" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Descripción de la transferencia" class="dark-input" rows="3" style="padding-top: 12px; resize: none;"></textarea>
                         </div>
                     </div>
+
+                    <div id="message" class="form-message" style="display:none; margin-bottom: 1rem;"></div>
 
                     <button type="submit" class="btn primary full-width">
                         <i class="fas fa-paper-plane"></i> Realizar Transferencia

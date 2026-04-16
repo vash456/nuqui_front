@@ -48,21 +48,63 @@ const authService = {
   login(identifier, password) {
     const users = this.getUsers();
     
-    const user = users.find(user =>
+    const userIndex = users.findIndex(user =>
       user.usuario.toLowerCase() === identifier.toLowerCase() ||
       user.email.toLowerCase() === identifier.toLowerCase()
     );
 
-    if (!user) {
+    if (userIndex === -1) {
       return { success: false, message: 'Usuario o correo no encontrado.' };
     }
 
-    if (user.contrasena !== password) {
-      return { success: false, message: 'Contraseña incorrecta.' };
+    const storedUser = users[userIndex];
+    const cliente = new Cliente(
+      storedUser.id,
+      storedUser.identificacion,
+      storedUser.nombreCompleto,
+      storedUser.celular,
+      storedUser.usuario,
+      storedUser.email,
+      storedUser.fechaNacimiento,
+      storedUser.contrasena
+    );
+
+    cliente.intentosFallidos = storedUser.intentosFallidos ?? 0;
+    cliente.bloqueado = storedUser.bloqueado ?? false;
+
+    if (cliente.bloqueado) {
+      return {
+        success: false,
+        message: 'Tu cuenta está bloqueada tras 3 intentos fallidos. Contacta al soporte para desbloquearla.'
+      };
     }
 
-    sesionService.saveSession(sesionService.getUserForSession(user));
-    return { success: true, message: 'Login exitoso.', user: user.usuario };
+    if (storedUser.contrasena !== password) {
+      cliente.incrementarIntentos();
+      storedUser.intentosFallidos = cliente.intentosFallidos;
+      storedUser.bloqueado = cliente.bloqueado;
+      this.saveUsers(users);
+
+      if (cliente.bloqueado) {
+        return {
+          success: false,
+          message: 'Has superado el número máximo de intentos. Tu cuenta ha sido bloqueada.'
+        };
+      }
+
+      return {
+        success: false,
+        message: `Contraseña incorrecta. Intento ${cliente.intentosFallidos} de 3.`
+      };
+    }
+
+    cliente.resetearIntentos();
+    storedUser.intentosFallidos = cliente.intentosFallidos;
+    storedUser.bloqueado = cliente.bloqueado;
+    this.saveUsers(users);
+
+    sesionService.saveSession(sesionService.getUserForSession(storedUser));
+    return { success: true, message: 'Login exitoso.', user: storedUser.usuario };
   },
 
   logout(userId) {

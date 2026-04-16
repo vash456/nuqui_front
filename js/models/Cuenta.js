@@ -19,6 +19,14 @@ export class Cuenta {
     throw new Error('Metodo no implementado');
   }
 
+  transferir(destino, monto) {
+    throw new Error('Metodo no implementado');
+  }
+
+  validarDestino(cuenta) {
+    throw new Error('Metodo no implementado');
+  }
+
   obtenerMovimientos() {
     return [...this.movimientos];
   }

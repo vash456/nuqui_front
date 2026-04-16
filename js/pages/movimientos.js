@@ -1,6 +1,7 @@
 import uiService from '../services/uiService.js';
 import sesionService from '../services/sesionService.js';
 import productosService from '../services/productosService.js';
+import { TipoMovimiento } from '../models/TipoMovimiento.js';
 
 const searchInput = document.querySelector('.search-input');
 const filterButtons = document.querySelectorAll('.filter-btn');
@@ -64,8 +65,8 @@ function cargarMovimientos() {
         accountType,
         accountLabel,
         accountNumber: cuenta.numeroCuenta,
-        isExpense: mov.tipo === 'RETIRO',
-        isIncome: mov.tipo === 'CONSIGNACION'
+        isExpense: mov.tipo === 'RETIRO' || mov.tipo === 'TRANSFERENCIA_OUT',
+        isIncome: mov.tipo === 'CONSIGNACION' || mov.tipo === 'TRANSFERENCIA_IN'
       });
     });
   });
@@ -77,8 +78,8 @@ function cargarMovimientos() {
         accountType: 'tarjeta-credito',
         accountLabel: 'Tarjeta de Crédito',
         accountNumber: tarjeta.numeroCuenta,
-        isExpense: mov.tipo === 'RETIRO',
-        isIncome: mov.tipo === 'CONSIGNACION'
+        isExpense: mov.tipo === 'RETIRO' || mov.tipo === 'TRANSFERENCIA_OUT',
+        isIncome: mov.tipo === 'CONSIGNACION' || mov.tipo === 'TRANSFERENCIA_IN'
       });
     });
   });
@@ -108,6 +109,15 @@ function formatDate(value) {
     day: '2-digit',
     month: 'short',
     year: 'numeric'
+  }).format(date);
+}
+
+function formatTime(value) {
+  const date = value ? new Date(value) : new Date();
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('es-CO', {
+    hour: '2-digit',
+    minute: '2-digit'
   }).format(date);
 }
 
@@ -144,7 +154,7 @@ function renderMovements() {
       </div>
       <div class="movement-details">
         <h3 class="movement-name">${movement.descripcion || 'Movimiento'}</h3>
-        <p class="movement-date">${formatDate(movement.fechaHora)} • ${movement.accountLabel}</p>
+        <p class="movement-date">${formatDate(movement.fechaHora)} ${formatTime(movement.fechaHora)} • ${movement.accountLabel}</p>
         <p class="movement-account">Cuenta: ${movement.accountNumber}</p>
       </div>
       <div class="movement-amount ${isExpense ? 'expense-text' : 'income-text'}">

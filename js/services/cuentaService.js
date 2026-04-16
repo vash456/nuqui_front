@@ -32,7 +32,7 @@ const cuentaService = {
 
     const validation = this.validarMonto(monto);
     if (!validation.success) return validation;
-
+    
     return cuenta.consignar(validation.value);
   },
 

@@ -115,7 +115,10 @@ consignarForm.addEventListener('submit', (event) => {
       uiService.showMessage(messageBox, result.message);
       return;
     }
-
+    
+    console.log("productos usuario");
+    console.log(productos);
+    
     productosService.guardarProductos(productos);
     uiService.showMessage(messageBox, result.message, 'success');
     actualizarInfoCuenta(cuenta);

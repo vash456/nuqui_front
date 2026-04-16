@@ -14,6 +14,7 @@ export class Cliente extends IAutenticable {
     this.contrasena = contrasena;
     this.intentosFallidos = 0;
     this.bloqueado = false;
+    this.fechaRegistro = new Date();
   }
 
   autenticar(usuario, contrasena) {
@@ -29,11 +30,19 @@ export class Cliente extends IAutenticable {
   }
 
   incrementarIntentos() {
-    throw new Error('Metodo no implementado');
+    if (this.bloqueado) {
+      return;
+    }
+
+    this.intentosFallidos = (this.intentosFallidos || 0) + 1;
+    if (this.intentosFallidos >= 3) {
+      this.bloqueado = true;
+    }
   }
 
   resetearIntentos() {
-    throw new Error('Metodo no implementado');
+    this.intentosFallidos = 0;
+    this.bloqueado = false;
   }
 
   editarPerfil() {
