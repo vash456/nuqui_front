@@ -1,6 +1,8 @@
+import { Cliente } from '../models/Cliente.js';
 import authService from '../services/authService.js';
 import sesionService from '../services/sesionService.js';
 import uiService from '../services/uiService.js';
+import productosService from '../services/productosService.js';
 
 // Validar sesión al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,16 +18,18 @@ logoutLink?.addEventListener('click', event => {
 
 // Funcionalidad específica para perfil de usuario
 document.addEventListener('DOMContentLoaded', () => {
-    const storageKey = 'astroUserProfile';
     const profileForm = document.querySelector('#profileForm');
     const nameInput = document.querySelector('#profileName');
+    const userInput = document.querySelector('#profileUser');
+    const identificationInput = document.querySelector('#profileIdentification');
     const emailInput = document.querySelector('#profileEmail');
     const phoneInput = document.querySelector('#profilePhone');
-    const addressInput = document.querySelector('#profileAddress');
     const birthdateInput = document.querySelector('#profileBirthdate');
     const saveMessage = document.querySelector('#saveMessage');
     const sidebarName = document.querySelector('.user-summary-card h3');
     const sidebarEmail = document.querySelector('.user-email');
+    const clientSinceDate = document.querySelector('#clientSinceDate');
+    const activeProductsCount = document.querySelector('#activeProductsCount');
     const avatarCircle = document.querySelector('.avatar');
 
     // Password change elements
@@ -54,45 +58,114 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function loadProfile() {
-        const profileData = localStorage.getItem(storageKey);
-        if (!profileData) return;
+    function formatDateInSpanish(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (Number.isNaN(date.getTime())) return dateString;
+        
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return new Intl.DateTimeFormat('es-ES', options).format(date);
+    }
 
-        const profile = JSON.parse(profileData);
-        if (nameInput && profile.name) nameInput.value = profile.name;
-        if (emailInput && profile.email) emailInput.value = profile.email;
-        if (phoneInput && profile.phone) phoneInput.value = profile.phone;
-        if (addressInput && profile.address) addressInput.value = profile.address;
-        if (birthdateInput && profile.birthdate) birthdateInput.value = profile.birthdate;
-        if (sidebarName && profile.name) sidebarName.textContent = profile.name;
-        if (sidebarEmail && profile.email) sidebarEmail.textContent = profile.email;
-        if (profile.name) updateAvatarInitials(profile.name);
+    function countActiveProducts(userId) {
+        try {
+            const productos = productosService.obtenerProductosCliente(userId);
+            if (!productos) return 0;
+
+            const cuentas = productos.listarCuentas() || [];
+            const tarjetas = productos.listarTarjetas() || [];
+
+            const activeAccounts = cuentas.filter(c => c.estado === 'activa').length;
+            const activeCards = tarjetas.filter(t => t.estado === 'activa').length;
+
+            return activeAccounts + activeCards;
+        } catch (error) {
+            console.error('Error contando productos activos:', error);
+            return 0;
+        }
+    }
+
+    function loadProfile() {
+        const currentUser = sesionService.getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const users = authService.getUsers();
+        const storedUser = users.find(user => user.id === currentUser.id);
+        if (!storedUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        if (nameInput) nameInput.value = storedUser.nombreCompleto || '';
+        if (userInput) userInput.value = storedUser.usuario || '';
+        if (identificationInput) identificationInput.value = storedUser.identificacion || '';
+        if (emailInput) emailInput.value = storedUser.email || '';
+        if (phoneInput) phoneInput.value = storedUser.celular || '';
+        if (birthdateInput) birthdateInput.value = storedUser.fechaNacimiento || '';
+        if (sidebarName) sidebarName.textContent = storedUser.nombreCompleto || '';
+        if (sidebarEmail) sidebarEmail.textContent = storedUser.email || '';
+        if (clientSinceDate) clientSinceDate.textContent = formatDateInSpanish(storedUser.fechaRegistro || '');
+        
+        const activeCount = countActiveProducts(currentUser.id);
+        if (activeProductsCount) {
+            activeProductsCount.textContent = activeCount > 0 ? `${activeCount} producto${activeCount > 1 ? 's' : ''}` : '0 productos';
+        }
+        
+        updateAvatarInitials(storedUser.nombreCompleto || storedUser.usuario || '');
     }
 
     function saveProfile(event) {
         event.preventDefault();
 
-        const profile = {
-            name: nameInput.value.trim(),
-            email: emailInput.value.trim(),
-            phone: phoneInput.value.trim(),
-            address: addressInput.value.trim(),
-            birthdate: birthdateInput.value
-        };
-
-        localStorage.setItem(storageKey, JSON.stringify(profile));
-
-        if (sidebarName) sidebarName.textContent = profile.name;
-        if (sidebarEmail) sidebarEmail.textContent = profile.email;
-        updateAvatarInitials(profile.name);
-
-        if (saveMessage) {
-            saveMessage.style.display = 'block';
-            saveMessage.textContent = 'Tus cambios se guardaron correctamente.';
-            setTimeout(() => {
-                saveMessage.style.display = 'none';
-            }, 3000);
+        const currentUser = sesionService.getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+            return;
         }
+
+        const users = authService.getUsers();
+        const storedUser = users.find(user => user.id === currentUser.id);
+        if (!storedUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const cliente = new Cliente(
+            storedUser.id,
+            storedUser.identificacion,
+            storedUser.nombreCompleto,
+            storedUser.celular,
+            storedUser.usuario,
+            storedUser.email,
+            storedUser.fechaNacimiento,
+            storedUser.contrasena
+        );
+
+        const result = cliente.editarPerfil({
+            nombreCompleto: nameInput.value.trim(),
+            usuario: userInput.value.trim(),
+            email: emailInput.value.trim(),
+            celular: phoneInput.value.trim(),
+            fechaNacimiento: storedUser.fechaNacimiento || ''
+        });
+
+        if (!result.success) {
+            uiService.showMessage(saveMessage, result.message, 'error');
+            return;
+        }
+
+        const updatedUser = sesionService.getCurrentUser();
+        if (sidebarName) sidebarName.textContent = updatedUser.nombreCompleto || '';
+        if (sidebarEmail) sidebarEmail.textContent = updatedUser.email || '';
+        updateAvatarInitials(updatedUser.nombreCompleto || updatedUser.usuario || '');
+
+        uiService.showMessage(saveMessage, result.message, 'success');
+        setTimeout(() => {
+            saveMessage.style.display = 'none';
+        }, 3000);
     }
 
     if (profileForm) {

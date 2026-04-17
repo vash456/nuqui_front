@@ -66,7 +66,8 @@ const authService = {
       storedUser.usuario,
       storedUser.email,
       storedUser.fechaNacimiento,
-      storedUser.contrasena
+      storedUser.contrasena,
+      storedUser.fechaRegistro
     );
 
     cliente.intentosFallidos = storedUser.intentosFallidos ?? 0;
@@ -120,16 +121,20 @@ const authService = {
       return { success: false, message: 'Usuario no encontrado.' };
     }
 
-    const user = users[userIndex];
+    const storedUser = users[userIndex];
+    const cliente = new Cliente(
+      storedUser.id,
+      storedUser.identificacion,
+      storedUser.nombreCompleto,
+      storedUser.celular,
+      storedUser.usuario,
+      storedUser.email,
+      storedUser.fechaNacimiento,
+      storedUser.contrasena,
+      storedUser.fechaRegistro
+    );
 
-    if (user.contrasena !== oldPassword) {
-      return { success: false, message: 'La contraseña actual es incorrecta.' };
-    }
-
-    user.contrasena = newPassword;
-    this.saveUsers(users);
-
-    return { success: true, message: 'Contraseña actualizada correctamente.' };
+    return cliente.cambiarContrasena(oldPassword, newPassword);
   },
 };
 

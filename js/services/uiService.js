@@ -49,7 +49,8 @@ const uiService = {
         currentUser.usuario,
         currentUser.email,
         currentUser.fechaNacimiento,
-        null
+        null,
+        currentUser.fechaRegistro
       );
       cliente.cerrarSesion();
     } else {

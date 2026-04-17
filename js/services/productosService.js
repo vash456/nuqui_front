@@ -23,7 +23,8 @@ const productosService = {
       clienteData.usuario,
       clienteData.email,
       clienteData.fechaNacimiento,
-      clienteData.contrasena
+      clienteData.contrasena,
+      clienteData.fechaRegistro
     );
   },
 

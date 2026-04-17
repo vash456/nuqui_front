@@ -34,34 +34,45 @@
                     <form id="profileForm">
                         <div class="input-group">
                             <label>Nombre Completo</label>
-                            <input id="profileName" type="text" value="Juan Pérez García" class="dark-input" required>
+                            <input id="profileName" type="text" value="" class="dark-input" required>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Usuario</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user"></i>
+                                    <input id="profileUser" type="text" value="" class="dark-input" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Identificación</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-id-card"></i>
+                                    <input id="profileIdentification" type="text" value="" class="dark-input" disabled>
+                                </div>
+                            </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
                                 <label>Email</label>
                                 <div class="input-wrapper">
                                     <i class="far fa-envelope"></i>
-                                    <input id="profileEmail" type="email" value="demo@astro.bank" class="dark-input" required>
+                                    <input id="profileEmail" type="email" value="" class="dark-input" required>
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Teléfono</label>
                                 <div class="input-wrapper">
                                     <i class="fas fa-phone-alt"></i>
-                                    <input id="profilePhone" type="tel" value="+57 612 345 6785" class="dark-input" required>
+                                    <input id="profilePhone" type="tel" value="" class="dark-input" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label>Dirección</label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <input id="profileAddress" type="text" value="Calle Gran Vía, 28, Madrid, España" class="dark-input" required>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Fecha de Nacimiento</label>
+                                <input id="profileBirthdate" type="date" value="" class="dark-input" disabled>
                             </div>
-                        </div>
-                        <div class="input-group">
-                            <label>Fecha de Nacimiento</label>
-                            <input id="profileBirthdate" type="date" value="1990-05-15" class="dark-input">
                         </div>
                         <button type="submit" class="btn primary full-width">
                             <i class="fas fa-save"></i> Guardar Cambios
@@ -105,8 +116,8 @@
                     <p class="user-email">demo@astro.bank</p>
                     <hr class="divider">
                     <div class="user-stats">
-                        <p><i class="far fa-calendar-alt"></i> Cliente desde: <strong>14 de enero de 2024</strong></p>
-                        <p><i class="fas fa-wallet"></i> Productos activos: <strong>3 cuentas</strong></p>
+                        <p><i class="far fa-calendar-alt"></i> Cliente desde: <strong id="clientSinceDate">14 de enero de 2024</strong></p>
+                        <p><i class="fas fa-wallet"></i> Productos activos: <strong id="activeProductsCount">0</strong></p>
                     </div>
                 </div>
 

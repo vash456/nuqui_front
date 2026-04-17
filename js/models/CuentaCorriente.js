@@ -11,7 +11,7 @@ export class CuentaCorriente extends Cuenta {
   }
 
   retirar(monto) {
-    if (monto <= 0) {
+    if (!Number.isFinite(monto) || monto <= 0) {
       return { success: false, message: 'El monto a retirar debe ser mayor a cero' };
     }
     if (monto > this.saldo + this.calcularLimiteSobregiro()) {
@@ -38,7 +38,7 @@ export class CuentaCorriente extends Cuenta {
   }
 
   consignar(monto) {
-    if (monto <= 0) {
+    if (!Number.isFinite(monto) || monto <= 0) {
       return { success: false, message: 'El monto a consignar debe ser mayor a cero' };
     }
     this.saldo += monto;
