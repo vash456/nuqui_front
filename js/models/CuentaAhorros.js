@@ -18,13 +18,21 @@ export class CuentaAhorros extends Cuenta {
     if (!Number.isFinite(valor) || valor <= 0) {
       return { success: false, message: 'El monto a retirar debe ser mayor a cero' };
     }
-    if (valor > this.saldo) {
-      return { success: false, message: 'Fondos insuficientes' };
+
+    // Calcular comisión del 1.5%
+    const comision = valor * 0.015;
+    const totalADescontar = valor + comision;
+
+    if (totalADescontar > this.saldo) {
+      return { 
+        success: false, 
+        message: `Fondos insuficientes. Se requiere: $${totalADescontar.toFixed(2)} (retiro: $${valor.toFixed(2)} + comisión: $${comision.toFixed(2)})` 
+      };
     }
 
+    // Registrar retiro
     this.saldo -= valor;
-
-    const movimiento = new Movimiento(
+    const movimientoRetiro = new Movimiento(
       this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.RETIRO,
@@ -32,9 +40,21 @@ export class CuentaAhorros extends Cuenta {
       this.saldo,
       `Retiro de ${valor}`
     );
-    this.registrarMovimiento(movimiento);
+    this.registrarMovimiento(movimientoRetiro);
 
-    return { success: true, message: 'Retiro exitoso', data: { nuevoSaldo: this.saldo } };
+    // Registrar comisión
+    this.saldo -= comision;
+    const movimientoComision = new Movimiento(
+      this.movimientos.length + 1,
+      new Date(),
+      TipoMovimiento.COMISIÓN,
+      comision,
+      this.saldo,
+      `Comisión por retiro (1.5%): ${comision.toFixed(2)}`
+    );
+    this.registrarMovimiento(movimientoComision);
+
+    return { success: true, message: 'Retiro exitoso', data: { nuevoSaldo: this.saldo, comision: comision } };
   }
 
   consignar(monto) {
@@ -61,11 +81,24 @@ export class CuentaAhorros extends Cuenta {
   aplicarIntereses() {
     const intereses = this.calcularIntereses();
     this.saldo += intereses;
+
+    const movimiento = new Movimiento(
+      this.movimientos.length + 1,
+      new Date(),
+      TipoMovimiento.INTERES,
+      intereses,
+      this.saldo,
+      `Intereses aplicados (${this.tasaInteres}%): ${intereses.toFixed(2)}`
+    );
+    this.registrarMovimiento(movimiento);
+
     return { success: true, message: 'Intereses aplicados', data: { intereses, nuevoSaldo: this.saldo } };
   }
 
   calcularIntereses() {
-    return (Number(this.saldo) * Number(this.tasaInteres)) / 100;
+    // Tasa de interés es un porcentaje, convertir a decimal dividiendo entre 100
+    const tasaDecimal = Number(this.tasaInteres) / 100;
+    return Number(this.saldo) * tasaDecimal;
   }
 
   transferir(destino, monto) {

@@ -267,6 +267,27 @@ h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weig
 .progress-bar { background: #222; height: 6px; border-radius: 3px; margin: 10px 0; }
 .progress { background: var(--primary-gold); height: 100%; border-radius: 3px; box-shadow: 0 0 10px var(--primary-gold); }
 
+.card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 179, 0, 0.2);
+}
+
+.card-details .label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.card-details .label i {
+    color: var(--primary-gold);
+    font-size: 14px;
+}
+
 /* ACTION CARDS */
 .action-card {
     display: flex;

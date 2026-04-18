@@ -94,6 +94,35 @@ const productosService = {
     return productosCliente;
   },
 
+  serializarProductosCliente(productosCliente) {
+    if (!productosCliente) return null;
+
+    return {
+      cliente: productosCliente.cliente,
+      cuentas: productosCliente.cuentas.map(cuenta => ({
+        numeroCuenta: cuenta.numeroCuenta,
+        saldo: cuenta.saldo,
+        fechaApertura: cuenta.fechaApertura,
+        estado: cuenta.estado,
+        movimientos: cuenta.movimientos || [],
+        // Propiedades específicas según tipo
+        ...(cuenta.tasaInteres !== undefined && { tasaInteres: cuenta.tasaInteres }),
+        ...(cuenta.limiteSobregiro !== undefined && { limiteSobregiro: cuenta.limiteSobregiro }),
+        ...(cuenta.porcentajeSobregiro !== undefined && { porcentajeSobregiro: cuenta.porcentajeSobregiro })
+      })),
+      tarjetas: productosCliente.tarjetas.map(tarjeta => ({
+        numeroCuenta: tarjeta.numeroCuenta,
+        saldo: tarjeta.saldo,
+        fechaApertura: tarjeta.fechaApertura,
+        estado: tarjeta.estado,
+        cupo: tarjeta.cupo,
+        deuda: tarjeta.deuda,
+        numeroCuotas: tarjeta.numeroCuotas,
+        movimientos: tarjeta.movimientos || []
+      }))
+    };
+  },
+
   guardarProductos(productosCliente) {
     if (!productosCliente || !productosCliente.cliente) {
       throw new Error('Se requiere un ProductosCliente válido para guardar');
@@ -102,10 +131,13 @@ const productosService = {
     const productos = this.getAllProductos();
     const index = productos.findIndex(p => p.cliente.id === productosCliente.cliente.id);
 
+    // Serializar el ProductosCliente para guardar correctamente en localStorage
+    const productosSerializados = this.serializarProductosCliente(productosCliente);
+
     if (index >= 0) {
-      productos[index] = productosCliente;
+      productos[index] = productosSerializados;
     } else {
-      productos.push(productosCliente);
+      productos.push(productosSerializados);
     }
 
     localStorageService.guardarProductosClientes(productos);

@@ -65,7 +65,7 @@ function cargarMovimientos() {
         accountType,
         accountLabel,
         accountNumber: cuenta.numeroCuenta,
-        isExpense: mov.tipo === 'RETIRO' || mov.tipo === 'TRANSFERENCIA_OUT',
+        isExpense: mov.tipo === 'RETIRO' || mov.tipo === 'TRANSFERENCIA_OUT' || mov.tipo === 'COMISION' || mov.tipo === 'INTERES',
         isIncome: mov.tipo === 'CONSIGNACION' || mov.tipo === 'TRANSFERENCIA_IN'
       });
     });
@@ -78,8 +78,8 @@ function cargarMovimientos() {
         accountType: 'tarjeta-credito',
         accountLabel: 'Tarjeta de Crédito',
         accountNumber: tarjeta.numeroCuenta,
-        isExpense: mov.tipo === 'RETIRO' || mov.tipo === 'TRANSFERENCIA_OUT',
-        isIncome: mov.tipo === 'CONSIGNACION' || mov.tipo === 'TRANSFERENCIA_IN'
+        isExpense: mov.tipo === 'RETIRO' || mov.tipo === 'TRANSFERENCIA_OUT' || mov.tipo === 'COMPRA' || mov.tipo === 'COMISION' || mov.tipo === 'INTERES',
+        isIncome: mov.tipo === 'CONSIGNACION' || mov.tipo === 'TRANSFERENCIA_IN' || mov.tipo === 'PAGO'
       });
     });
   });

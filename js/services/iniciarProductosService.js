@@ -18,8 +18,8 @@ const iniciarProductosService = {
 
     // Crear ProductosCliente vacío para el usuario
     const productosCliente = productosService.crearProductosCliente(user);
-    productosCliente.agregarCuenta(new CuentaAhorros(`AH-${Date.now()}-001`, 0, new Date().toISOString(), 'activa', 0.015));
-    productosCliente.agregarCuenta(new CuentaCorriente(`CC-${Date.now()}-001`, 0, new Date().toISOString(), 'activa', 0.2, 500000));
+    productosCliente.agregarCuenta(new CuentaAhorros(`AH-${Date.now()}-001`, 0, new Date().toISOString(), 'activa', 1.5));
+    productosCliente.agregarCuenta(new CuentaCorriente(`CC-${Date.now()}-001`, 0, new Date().toISOString(), 'activa', 20, 500000));
     productosCliente.agregarTarjeta(new TarjetaCredito(`TC-${Date.now()}-001`, 0, new Date().toISOString(), 'activa', 3000000, 0, 12));
     productosService.guardarProductos(productosCliente);
 

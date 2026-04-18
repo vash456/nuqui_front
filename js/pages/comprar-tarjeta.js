@@ -7,8 +7,11 @@ const tarjetaSelect = document.querySelector('#tarjetaSelect');
 const montoInput = document.querySelector('#monto');
 const cuotasSelect = document.querySelector('#cuotas');
 const tarjetaInfo = document.querySelector('#tarjetaInfo');
-const deudaActual = document.querySelector('#deudaActual');
 const cupoDisponible = document.querySelector('#cupoDisponible');
+const tasaInteres = document.querySelector('#tasaInteres');
+const cuotaMensual = document.querySelector('#cuotaMensual');
+const tasaRow = document.querySelector('#tasaRow');
+const cuotaRow = document.querySelector('#cuotaRow');
 const messageBox = document.querySelector('#message');
 
 // Validar sesión al cargar la página
@@ -51,27 +54,97 @@ async function cargarTarjetas() {
     }
 }
 
+// Obtener tarjeta seleccionada (para cálculos previos sin guardar)
+function obtenerTarjetaSeleccionada() {
+    const numeroCuenta = tarjetaSelect.value;
+    if (!numeroCuenta) return null;
+
+    try {
+        const currentUser = sesionService.getCurrentUser();
+        const productos = productosService.obtenerProductosCliente(currentUser.id);
+        return productos.obtenerTarjeta(numeroCuenta);
+    } catch (error) {
+        console.error('Error obteniendo tarjeta:', error);
+        return null;
+    }
+}
+
+// Actualizar información de cuota cuando cambian cuotas o monto
+function actualizarInformacionCuota() {
+    const tarjeta = obtenerTarjetaSeleccionada();
+    const monto = parseFloat(montoInput.value);
+    const cuotas = parseInt(cuotasSelect.value);
+
+    if (!tarjeta || !monto || monto <= 0) {
+        tasaRow.style.display = 'none';
+        cuotaRow.style.display = 'none';
+        return;
+    }
+
+    try {
+        const detalles = tarjeta.calcularDetallesCuota(monto, cuotas);
+        
+        if (cuotas === 1) {
+            tasaRow.style.display = 'none';
+            cuotaRow.style.display = 'none';
+        } else {
+            tasaInteres.textContent = `${detalles.tasa}%`;
+            cuotaMensual.textContent = `$${detalles.cuotaMensual.toFixed(2)}`;
+            tasaRow.style.display = 'flex';
+            cuotaRow.style.display = 'flex';
+        }
+    } catch (error) {
+        console.error('Error calculando cuota:', error);
+        tasaRow.style.display = 'none';
+        cuotaRow.style.display = 'none';
+    }
+}
+
+// Validar monto contra cupo disponible
+function validarMonto() {
+    const tarjeta = obtenerTarjetaSeleccionada();
+    const monto = parseFloat(montoInput.value);
+
+    if (!tarjeta || !monto) return;
+
+    const cupoDisponibleNum = tarjeta.cupo - tarjeta.deuda;
+    
+    if (monto > cupoDisponibleNum) {
+        montoInput.classList.add('input-error');
+        uiService.showMessage(messageBox, `El monto excede el cupo disponible ($${cupoDisponibleNum.toFixed(2)})`);
+    } else {
+        montoInput.classList.remove('input-error');
+        uiService.clearMessage(messageBox);
+    }
+}
+
 // Mostrar información de la tarjeta seleccionada
 tarjetaSelect.addEventListener('change', () => {
-    const numeroCuenta = tarjetaSelect.value;
-    if (!numeroCuenta) {
+    const tarjeta = obtenerTarjetaSeleccionada();
+    
+    if (!tarjeta) {
         tarjetaInfo.style.display = 'none';
         return;
     }
 
     try {
-        const currentUser = sesionService.getCurrentUser();
-        const productos = productosService.obtenerProductosCliente(currentUser.id);
-        const tarjeta = productos.obtenerTarjeta(numeroCuenta);
-
-        if (tarjeta) {
-            deudaActual.textContent = tarjeta.deuda.toFixed(2);
-            cupoDisponible.textContent = (tarjeta.cupo - tarjeta.deuda).toFixed(2);
-            tarjetaInfo.style.display = 'block';
-        }
+        cupoDisponible.textContent = `$${(tarjeta.cupo - tarjeta.deuda).toFixed(2)}`;
+        tarjetaInfo.style.display = 'block';
+        actualizarInformacionCuota();
     } catch (error) {
         console.error('Error obteniendo información de tarjeta:', error);
     }
+});
+
+// Actualizar información cuando cambia el monto
+montoInput.addEventListener('input', () => {
+    validarMonto();
+    actualizarInformacionCuota();
+});
+
+// Actualizar información cuando cambian las cuotas
+cuotasSelect.addEventListener('change', () => {
+    actualizarInformacionCuota();
 });
 
 // Manejar compra
@@ -88,10 +161,15 @@ comprarForm.addEventListener('submit', async (event) => {
         return;
     }
 
+    if (!monto || monto <= 0) {
+        uiService.showMessage(messageBox, 'Ingresa un monto válido');
+        return;
+    }
+
     try {
         const currentUser = sesionService.getCurrentUser();
         const productos = productosService.obtenerProductosCliente(currentUser.id);
-        const tarjeta = productos.obtenerTarjeta(numeroCuenta);
+        const tarjeta = productos.obtenerTarjeta(tarjetaSelect.value);
 
         if (!tarjeta) {
             uiService.showMessage(messageBox, 'Tarjeta no encontrada');
@@ -105,18 +183,26 @@ comprarForm.addEventListener('submit', async (event) => {
             return;
         }
 
-        // Guardar cambios
+        // Guardar cambios con el mismo objeto productos que tiene la tarjeta modificada
         productosService.guardarProductos(productos);
 
-        uiService.showMessage(messageBox, result.message, 'success');
+        // Construir mensaje de éxito con información de la cuota
+        let mensajeExito = `✓ ${result.message}`;
+        if (cuotas > 1) {
+            mensajeExito += `\nCuotas: ${cuotas} | Tasa: ${result.data.tasa}% | Cuota: $${result.data.cuotaMensual.toFixed(2)}`;
+        }
+        
+        uiService.showMessage(messageBox, mensajeExito, 'success');
 
         // Actualizar información mostrada
-        deudaActual.textContent = result.data.nuevaDeuda.toFixed(2);
-        cupoDisponible.textContent = (tarjeta.cupo - result.data.nuevaDeuda).toFixed(2);
+        cupoDisponible.textContent = `$${(tarjeta.cupo - result.data.nuevaDeuda).toFixed(2)}`;
 
         // Limpiar formulario
         montoInput.value = '';
         cuotasSelect.value = '1';
+        montoInput.classList.remove('input-error');
+        tasaRow.style.display = 'none';
+        cuotaRow.style.display = 'none';
 
     } catch (error) {
         console.error('Error en compra:', error);

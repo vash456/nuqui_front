@@ -85,31 +85,41 @@ function cargarDatosDashboard() {
   setText(balanceAmount, formatCurrency(totalSaldo));
 
   if (creditCard) {
-    setText(creditCard.querySelector('.card-number'), tarjetaCredito?.numeroCuenta || 'No disponible');
-    setText(creditCard.querySelector('.amount'), tarjetaCredito ? formatCurrency(tarjetaCredito.deuda) : '$0.00');
-    const badge = creditCard.querySelector('.badge');
-    if (badge) {
-      if (tarjetaCredito) {
-        const disponible = (Number(tarjetaCredito.cupo) || 0) - (Number(tarjetaCredito.deuda) || 0);
-        badge.textContent = `Disponible: ${formatCurrency(disponible)}`;
-      } else {
-        badge.textContent = 'Disponible: $0.00';
-      }
+    setText(creditCard.querySelector('.card-number'),tarjetaCredito?.numeroCuenta? tarjetaCredito.numeroCuenta : 'No disponible');
+    const deuda = Number(tarjetaCredito?.deuda) || 0;
+    const cupo = Number(tarjetaCredito?.cupo) || 0;
+    const disponible = cupo - deuda;
+    
+    setText(creditCard.querySelector('.amount'), tarjetaCredito ? formatCurrency(deuda) : '$0.00');
+    setText(creditCard.querySelector('.credit-limit'), tarjetaCredito ? formatCurrency(cupo) : '$0.00');
+    setText(creditCard.querySelector('.credit-available'), tarjetaCredito ? formatCurrency(disponible) : '$0.00');
+    
+    // Calcular porcentaje de cupo disponible
+    const progressElement = creditCard.querySelector('.progress');
+    if (progressElement && cupo > 0) {
+      const porcentajeDisponible = (disponible / cupo) * 100;
+      progressElement.style.width = `${Math.min(Math.max(porcentajeDisponible, 0), 100)}%`;
     }
   }
 
   if (checkingCard) {
     setText(checkingCard.querySelector('.card-number'), cuentaCorriente?.numeroCuenta || 'No disponible');
-    setText(checkingCard.querySelector('.amount'), cuentaCorriente ? formatCurrency(cuentaCorriente.saldo) : '$0.00');
+    const saldo = Number(cuentaCorriente?.saldo) || 0;
+    const porcentajeSobregiro = Number(cuentaCorriente?.porcentajeSobregiro) || 0;
+    const limiteSobregiro = (saldo * porcentajeSobregiro) / 100;
+    const disponible = saldo + limiteSobregiro;
+    
+    setText(checkingCard.querySelector('.amount'), cuentaCorriente ? formatCurrency(saldo) : '$0.00');
+    setText(checkingCard.querySelector('.checking-available'), cuentaCorriente ? formatCurrency(disponible) : '$0.00');
+    setText(checkingCard.querySelector('.overdraft-limit'), cuentaCorriente ? formatCurrency(limiteSobregiro) : '$0.00');
   }
 
   if (savingsCard) {
     setText(savingsCard.querySelector('.card-number'), cuentaAhorros?.numeroCuenta || 'No disponible');
     setText(savingsCard.querySelector('.amount'), cuentaAhorros ? formatCurrency(cuentaAhorros.saldo) : '$0.00');
-    const badge = savingsCard.querySelector('.badge');
-    if (badge) {
-      badge.textContent = cuentaAhorros ? `Interés Anual: ${Number(cuentaAhorros.tasaInteres || 0).toFixed(2)}%` : 'Interés Anual: 0.00%';
-    }
+    
+    const interestRate = cuentaAhorros ? Number(cuentaAhorros.tasaInteres || 0).toFixed(2) : '0.00';
+    setText(savingsCard.querySelector('.interest-rate'), `${interestRate}%`);
   }
 
   originalBalance = balanceAmount?.textContent || originalBalance;

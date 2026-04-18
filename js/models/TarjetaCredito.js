@@ -13,13 +13,33 @@ export class TarjetaCredito extends Cuenta {
 
   comprar(monto, cuotas = 1) {
     const valor = Number(monto);
+    const numCuotas = Number(cuotas);
+
     if (!Number.isFinite(valor) || valor <= 0) {
       return { success: false, message: 'El monto de compra debe ser mayor a cero' };
     }
+
+    if (numCuotas <= 0) {
+      return { success: false, message: 'El número de cuotas debe ser mayor a cero' };
+    }
+
     if (this.deuda + valor > this.cupo) {
       return { success: false, message: 'Compra excede el cupo disponible' };
     }
+
+    // Calcular tasa de interés según número de cuotas
+    const tasaPorcentaje = this.calcularTasaCosto(numCuotas);
+
+    // Calcular cuota mensual usando la fórmula de amortización
+    const cuotaMensual = this.calcularCuotaMensual(valor, numCuotas, tasaPorcentaje);
+
+    // Aumentar deuda
     this.deuda += valor;
+
+    // Crear descripción detallada del movimiento
+    const descripcion = numCuotas === 1
+      ? `Compra de ${valor}`
+      : `Compra de ${valor} en ${numCuotas} cuotas (Tasa: ${tasaPorcentaje}%, Cuota: $${cuotaMensual.toFixed(2)})`;
 
     const movimiento = new Movimiento(
       this.movimientos.length + 1,
@@ -27,11 +47,26 @@ export class TarjetaCredito extends Cuenta {
       TipoMovimiento.COMPRA,
       valor,
       this.deuda,
-      `Compra de ${valor} en ${cuotas} cuotas`
+      descripcion
     );
+
+    // Agregar metadatos del movimiento para cálculos posteriores
+    movimiento.cuotas = numCuotas;
+    movimiento.tasaPorcentaje = tasaPorcentaje;
+    movimiento.cuotaMensual = cuotaMensual;
+
     this.registrarMovimiento(movimiento);
 
-    return { success: true, message: 'Compra realizada', data: { nuevaDeuda: this.deuda, cuotas } };
+    return {
+      success: true,
+      message: 'Compra realizada',
+      data: {
+        nuevaDeuda: this.deuda,
+        cuotas: numCuotas,
+        tasa: tasaPorcentaje,
+        cuotaMensual: cuotaMensual
+      }
+    };
   }
 
   pagar(monto) {
@@ -61,12 +96,55 @@ export class TarjetaCredito extends Cuenta {
     throw new Error('Metodo no implementado');
   }
 
-  calcularTasaCosto() {
-    throw new Error('Metodo no implementado');
+  calcularCuotaMensual(capital, numCuotas, tasaMensualPorcentaje) {
+    // Fórmula de amortización: Cuota = (Capital * tasa) / (1 - (1 + tasa)^-n)
+    // Donde:
+    // - capital: monto a financiar
+    // - numCuotas: número de cuotas (n)
+    // - tasaMensualPorcentaje: tasa mensual en porcentaje
+
+    const capitalNum = Number(capital);
+    const n = Number(numCuotas);
+    const tasaPorcentaje = Number(tasaMensualPorcentaje);
+
+    if (tasaPorcentaje === 0 || n === 0) {
+      // Si la tasa es 0%, la cuota es simple división
+      return capitalNum / n;
+    }
+
+    // Convertir tasa de porcentaje a decimal
+    const r = tasaPorcentaje / 100;
+
+    // Aplicar fórmula de amortización
+    const cuota = (capitalNum * r) / (1 - Math.pow(1 + r, -n));
+
+    return cuota;
   }
 
-  calcularCuotaMensual() {
-    throw new Error('Metodo no implementado');
+  // Calcular información de cuota sin hacer la compra (para validación previa)
+  calcularDetallesCuota(monto, numCuotas) {
+    const valor = Number(monto);
+    const numCuotasNum = Number(numCuotas);
+
+    const tasaPorcentaje = this.calcularTasaCosto(numCuotasNum);
+    const cuotaMensual = this.calcularCuotaMensual(valor, numCuotasNum, tasaPorcentaje);
+
+    return {
+      tasa: tasaPorcentaje,
+      cuotaMensual: cuotaMensual
+    };
+  }
+
+  calcularTasaCosto(numCuotas) {
+    // Retorna la tasa de interés mensual como porcentaje
+    if (numCuotas >= 1 && numCuotas <= 2) {
+      return 0; // 0%
+    } else if (numCuotas >= 3 && numCuotas <= 6) {
+      return 1.9; // 1.9%
+    } else if (numCuotas >= 7) {
+      return 2.3; // 2.3%
+    }
+    return 0; // Default
   }
 
   transferir(destino, monto) {
