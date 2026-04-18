@@ -50,28 +50,47 @@ async function cargarTarjetas() {
     }
 }
 
+// Obtener tarjeta seleccionada
+function obtenerTarjetaSeleccionada() {
+    const numeroCuenta = tarjetaSelect.value;
+    if (!numeroCuenta) return null;
+
+    try {
+        const currentUser = sesionService.getCurrentUser();
+        const productos = productosService.obtenerProductosCliente(currentUser.id);
+        return productos.obtenerTarjeta(numeroCuenta);
+    } catch (error) {
+        console.error('Error obteniendo tarjeta:', error);
+        return null;
+    }
+}
+
 // Mostrar información de la tarjeta seleccionada
 tarjetaSelect.addEventListener('change', () => {
-    const numeroCuenta = tarjetaSelect.value;
-    if (!numeroCuenta) {
+    const tarjeta = obtenerTarjetaSeleccionada();
+    
+    if (!tarjeta) {
         tarjetaInfo.style.display = 'none';
         return;
     }
 
     try {
-        const currentUser = sesionService.getCurrentUser();
-        const productos = productosService.obtenerProductosCliente(currentUser.id);
-        const tarjeta = productos.obtenerTarjeta(numeroCuenta);
-
-        if (tarjeta) {
-            deudaActual.textContent = tarjeta.deuda.toFixed(2);
-            cupoDisponible.textContent = (tarjeta.cupo - tarjeta.deuda).toFixed(2);
-            tarjetaInfo.style.display = 'block';
-        }
+        deudaActual.textContent = formatCurrency(tarjeta.deuda);
+        cupoDisponible.textContent = formatCurrency(tarjeta.cupo - tarjeta.deuda);
+        tarjetaInfo.style.display = 'block';
     } catch (error) {
         console.error('Error obteniendo información de tarjeta:', error);
     }
 });
+
+function formatCurrency(value) {
+  const number = Number(value) || 0;
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 2,
+  }).format(number);
+}
 
 // Manejar pago
 pagarForm.addEventListener('submit', async (event) => {
@@ -83,6 +102,11 @@ pagarForm.addEventListener('submit', async (event) => {
 
     if (!numeroCuenta) {
         uiService.showMessage(messageBox, 'Selecciona una tarjeta');
+        return;
+    }
+
+    if (!monto || monto <= 0) {
+        uiService.showMessage(messageBox, 'Ingresa un monto válido');
         return;
     }
 
@@ -103,14 +127,14 @@ pagarForm.addEventListener('submit', async (event) => {
             return;
         }
 
-        // Guardar cambios
+        // Guardar cambios con el mismo objeto productos que tiene la tarjeta modificada
         productosService.guardarProductos(productos);
 
-        uiService.showMessage(messageBox, result.message, 'success');
+        uiService.showMessage(messageBox, `✓ ${result.message}`, 'success');
 
         // Actualizar información mostrada
-        deudaActual.textContent = result.data.nuevaDeuda.toFixed(2);
-        cupoDisponible.textContent = (tarjeta.cupo - result.data.nuevaDeuda).toFixed(2);
+        deudaActual.textContent = formatCurrency(result.data.nuevaDeuda);
+        cupoDisponible.textContent = formatCurrency(tarjeta.cupo - result.data.nuevaDeuda);
 
         // Limpiar formulario
         montoInput.value = '';
