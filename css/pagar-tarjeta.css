@@ -113,6 +113,11 @@
     margin-top: 2rem;
 }
 
+.auth-card button.btn {
+    display: block;
+    margin: 0 auto;
+}
+
 .btn-primary,
 .btn-secondary {
     padding: 0.75rem 1.5rem;
