@@ -2,17 +2,18 @@ import { Cuenta } from './Cuenta.js';
 import { Movimiento } from './Movimiento.js';
 import { TipoMovimiento } from './TipoMovimiento.js';
 import localStorageService from '../storage/localstorage.js';
+import { roundMoney } from '../utils/money.js';
 
 export class TarjetaCredito extends Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado, cupo, deuda, numeroCuotas) {
-    super(numeroCuenta, Number(saldo) || 0, fechaApertura, estado);
-    this.cupo = Number(cupo) || 0;
-    this.deuda = Number(deuda) || 0;
+    super(numeroCuenta, saldo, fechaApertura, estado);
+    this.cupo = roundMoney(cupo);
+    this.deuda = roundMoney(deuda);
     this.numeroCuotas = numeroCuotas;
   }
 
   comprar(monto, cuotas = 1) {
-    const valor = Number(monto);
+    const valor = roundMoney(monto);
     const numCuotas = Number(cuotas);
 
     if (!Number.isFinite(valor) || valor <= 0) {
@@ -23,29 +24,31 @@ export class TarjetaCredito extends Cuenta {
       return { success: false, message: 'El número de cuotas debe ser mayor a cero' };
     }
 
-    if (this.deuda + valor > this.cupo) {
-      return { success: false, message: 'Compra excede el cupo disponible' };
-    }
-
     // Calcular tasa de interés según número de cuotas
     const tasaPorcentaje = this.calcularTasaCosto(numCuotas);
 
     // Calcular cuota mensual usando la fórmula de amortización
     const cuotaMensual = this.calcularCuotaMensual(valor, numCuotas, tasaPorcentaje);
+    const totalFinanciado = roundMoney(cuotaMensual * numCuotas);
+    const intereses = roundMoney(totalFinanciado - valor);
 
-    // Aumentar deuda
-    this.deuda += valor;
+    if (roundMoney(this.deuda + totalFinanciado) > this.cupo) {
+      return { success: false, message: 'Compra excede el cupo disponible' };
+    }
+
+    // Aumentar deuda con el total financiado, incluyendo intereses de cuotas
+    this.deuda = roundMoney(this.deuda + totalFinanciado);
 
     // Crear descripción detallada del movimiento
     const descripcion = numCuotas === 1
       ? `Compra de ${valor}`
-      : `Compra de ${valor} en ${numCuotas} cuotas (Tasa: ${tasaPorcentaje}%, Cuota: $${cuotaMensual.toFixed(2)})`;
+      : `Compra de ${valor} en ${numCuotas} cuotas (Tasa: ${tasaPorcentaje}%, Intereses: $${intereses.toFixed(2)}, Total: $${totalFinanciado.toFixed(2)}, Cuota: $${cuotaMensual.toFixed(2)})`;
 
     const movimiento = new Movimiento(
       this.movimientos.length + 1,
       new Date(),
       TipoMovimiento.COMPRA,
-      valor,
+      totalFinanciado,
       this.deuda,
       descripcion
     );
@@ -64,7 +67,9 @@ export class TarjetaCredito extends Cuenta {
         nuevaDeuda: this.deuda,
         cuotas: numCuotas,
         tasa: tasaPorcentaje,
-        cuotaMensual: cuotaMensual
+        cuotaMensual: cuotaMensual,
+        intereses: intereses,
+        totalFinanciado: totalFinanciado
       }
     };
   }
@@ -77,7 +82,7 @@ export class TarjetaCredito extends Cuenta {
     if (valor > this.deuda) {
       return { success: false, message: 'El monto excede la deuda actual' };
     }
-    this.deuda -= valor;
+    this.deuda = roundMoney(this.deuda - valor);
 
     const movimiento = new Movimiento(
       this.movimientos.length + 1,
@@ -90,6 +95,62 @@ export class TarjetaCredito extends Cuenta {
     this.registrarMovimiento(movimiento);
 
     return { success: true, message: 'Pago realizado', data: { nuevaDeuda: this.deuda } };
+  }
+
+  pagarDesdeCuenta(cuenta, monto) {
+    const valor = roundMoney(monto);
+    const esCuentaValida = cuenta?.constructor?.name === 'CuentaAhorros' || cuenta?.constructor?.name === 'CuentaCorriente';
+
+    if (!esCuentaValida) {
+      return { success: false, message: 'Selecciona una cuenta válida para realizar el pago' };
+    }
+
+    if (!Number.isFinite(valor) || valor <= 0) {
+      return { success: false, message: 'El monto a pagar debe ser mayor a cero' };
+    }
+
+    if (valor > this.deuda) {
+      return { success: false, message: 'El monto excede la deuda actual' };
+    }
+
+    const disponible = cuenta.constructor.name === 'CuentaCorriente'
+      ? roundMoney(Number(cuenta.saldo) + Number(cuenta.calcularLimiteSobregiro()))
+      : roundMoney(cuenta.saldo);
+
+    if (valor > disponible) {
+      return { success: false, message: 'Fondos insuficientes en la cuenta seleccionada' };
+    }
+
+    cuenta.saldo = roundMoney(cuenta.saldo - valor);
+    const movimientoCuenta = new Movimiento(
+      cuenta.movimientos.length + 1,
+      new Date(),
+      TipoMovimiento.PAGO,
+      valor,
+      cuenta.saldo,
+      `Pago a tarjeta ${this.numeroCuenta}`
+    );
+    cuenta.registrarMovimiento(movimientoCuenta);
+
+    this.deuda = roundMoney(this.deuda - valor);
+    const movimientoTarjeta = new Movimiento(
+      this.movimientos.length + 1,
+      new Date(),
+      TipoMovimiento.PAGO,
+      valor,
+      this.deuda,
+      `Pago recibido desde cuenta ${cuenta.numeroCuenta}`
+    );
+    this.registrarMovimiento(movimientoTarjeta);
+
+    return {
+      success: true,
+      message: 'Pago realizado',
+      data: {
+        nuevaDeuda: this.deuda,
+        nuevoSaldoCuenta: cuenta.saldo
+      }
+    };
   }
 
   retirar(monto) {
@@ -109,7 +170,7 @@ export class TarjetaCredito extends Cuenta {
 
     if (tasaPorcentaje === 0 || n === 0) {
       // Si la tasa es 0%, la cuota es simple división
-      return capitalNum / n;
+      return roundMoney(capitalNum / n);
     }
 
     // Convertir tasa de porcentaje a decimal
@@ -118,7 +179,7 @@ export class TarjetaCredito extends Cuenta {
     // Aplicar fórmula de amortización
     const cuota = (capitalNum * r) / (1 - Math.pow(1 + r, -n));
 
-    return cuota;
+    return roundMoney(cuota);
   }
 
   // Calcular información de cuota sin hacer la compra (para validación previa)
@@ -128,10 +189,14 @@ export class TarjetaCredito extends Cuenta {
 
     const tasaPorcentaje = this.calcularTasaCosto(numCuotasNum);
     const cuotaMensual = this.calcularCuotaMensual(valor, numCuotasNum, tasaPorcentaje);
+    const totalFinanciado = roundMoney(cuotaMensual * numCuotasNum);
+    const intereses = roundMoney(totalFinanciado - valor);
 
     return {
       tasa: tasaPorcentaje,
-      cuotaMensual: cuotaMensual
+      cuotaMensual: cuotaMensual,
+      intereses: intereses,
+      totalFinanciado: totalFinanciado
     };
   }
 
@@ -156,7 +221,7 @@ export class TarjetaCredito extends Cuenta {
       return { success: false, message: 'El monto de la transferencia debe ser mayor a cero' };
     }
 
-    const disponible = this.cupo - this.deuda;
+    const disponible = roundMoney(this.cupo - this.deuda);
     if (valor > disponible) {
       return { success: false, message: 'Cupo insuficiente en la tarjeta de crédito' };
     }
@@ -169,7 +234,7 @@ export class TarjetaCredito extends Cuenta {
       }
     }
 
-    this.deuda += valor;
+    this.deuda = roundMoney(this.deuda + valor);
     const movimientoSalida = new Movimiento(
       this.movimientos.length + 1,
       new Date(),
@@ -181,7 +246,7 @@ export class TarjetaCredito extends Cuenta {
     this.registrarMovimiento(movimientoSalida);
 
     if (destinoEsTarjeta) {
-      destino.deuda -= valor;
+      destino.deuda = roundMoney(destino.deuda - valor);
       const movimientoEntrada = new Movimiento(
         destino.movimientos.length + 1,
         new Date(),
@@ -192,7 +257,7 @@ export class TarjetaCredito extends Cuenta {
       );
       destino.registrarMovimiento(movimientoEntrada);
     } else {
-      destino.saldo += valor;
+      destino.saldo = roundMoney(destino.saldo + valor);
       const movimientoEntrada = new Movimiento(
         destino.movimientos.length + 1,
         new Date(),

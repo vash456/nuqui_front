@@ -4,6 +4,7 @@ import { Cliente } from '../models/Cliente.js';
 import { CuentaAhorros } from '../models/CuentaAhorros.js';
 import { CuentaCorriente } from '../models/CuentaCorriente.js';
 import { TarjetaCredito } from '../models/TarjetaCredito.js';
+import { roundMoney } from '../utils/money.js';
 
 const productosService = {
   crearProductosCliente(cliente) {
@@ -101,7 +102,7 @@ const productosService = {
       cliente: productosCliente.cliente,
       cuentas: productosCliente.cuentas.map(cuenta => ({
         numeroCuenta: cuenta.numeroCuenta,
-        saldo: cuenta.saldo,
+        saldo: roundMoney(cuenta.saldo),
         fechaApertura: cuenta.fechaApertura,
         estado: cuenta.estado,
         movimientos: cuenta.movimientos || [],
@@ -112,11 +113,11 @@ const productosService = {
       })),
       tarjetas: productosCliente.tarjetas.map(tarjeta => ({
         numeroCuenta: tarjeta.numeroCuenta,
-        saldo: tarjeta.saldo,
+        saldo: roundMoney(tarjeta.saldo),
         fechaApertura: tarjeta.fechaApertura,
         estado: tarjeta.estado,
         cupo: tarjeta.cupo,
-        deuda: tarjeta.deuda,
+        deuda: roundMoney(tarjeta.deuda),
         numeroCuotas: tarjeta.numeroCuotas,
         movimientos: tarjeta.movimientos || []
       }))

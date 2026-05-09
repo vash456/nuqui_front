@@ -2,15 +2,16 @@ import { Cuenta } from './Cuenta.js';
 import { Movimiento } from './Movimiento.js';
 import { TipoMovimiento } from './TipoMovimiento.js';
 import localStorageService from '../storage/localstorage.js';
+import { roundMoney } from '../utils/money.js';
 
 export class CuentaAhorros extends Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado, tasaInteres) {
-    super(numeroCuenta, Number(saldo) || 0, fechaApertura, estado);
+    super(numeroCuenta, saldo, fechaApertura, estado);
     this.tasaInteres = tasaInteres;
   }
 
   consultarSaldo() {
-    return Number(this.saldo) || 0;
+    return roundMoney(this.saldo);
   }
 
   retirar(monto) {
@@ -20,8 +21,8 @@ export class CuentaAhorros extends Cuenta {
     }
 
     // Calcular comisión del 1.5%
-    const comision = valor * 0.015;
-    const totalADescontar = valor + comision;
+    const comision = roundMoney(valor * 0.015);
+    const totalADescontar = roundMoney(valor + comision);
 
     if (totalADescontar > this.saldo) {
       return { 
@@ -31,7 +32,7 @@ export class CuentaAhorros extends Cuenta {
     }
 
     // Registrar retiro
-    this.saldo -= valor;
+    this.saldo = roundMoney(this.saldo - valor);
     const movimientoRetiro = new Movimiento(
       this.movimientos.length + 1,
       new Date(),
@@ -43,7 +44,7 @@ export class CuentaAhorros extends Cuenta {
     this.registrarMovimiento(movimientoRetiro);
 
     // Registrar comisión
-    this.saldo -= comision;
+    this.saldo = roundMoney(this.saldo - comision);
     const movimientoComision = new Movimiento(
       this.movimientos.length + 1,
       new Date(),
@@ -63,7 +64,7 @@ export class CuentaAhorros extends Cuenta {
       return { success: false, message: 'El monto a consignar debe ser mayor a cero' };
     }
 
-    this.saldo += valor;
+    this.saldo = roundMoney(this.saldo + valor);
 
     const movimiento = new Movimiento(
       this.movimientos.length + 1,
@@ -80,7 +81,7 @@ export class CuentaAhorros extends Cuenta {
 
   aplicarIntereses() {
     const intereses = this.calcularIntereses();
-    this.saldo += intereses;
+    this.saldo = roundMoney(this.saldo + intereses);
 
     const movimiento = new Movimiento(
       this.movimientos.length + 1,
@@ -98,7 +99,7 @@ export class CuentaAhorros extends Cuenta {
   calcularIntereses() {
     // Tasa de interés es un porcentaje, convertir a decimal dividiendo entre 100
     const tasaDecimal = Number(this.tasaInteres) / 100;
-    return Number(this.saldo) * tasaDecimal;
+    return roundMoney(Number(this.saldo) * tasaDecimal);
   }
 
   transferir(destino, monto) {
@@ -122,7 +123,7 @@ export class CuentaAhorros extends Cuenta {
       }
     }
 
-    this.saldo -= valor;
+    this.saldo = roundMoney(this.saldo - valor);
     const movimientoSalida = new Movimiento(
       this.movimientos.length + 1,
       new Date(),
@@ -134,7 +135,7 @@ export class CuentaAhorros extends Cuenta {
     this.registrarMovimiento(movimientoSalida);
 
     if (destinoEsTarjeta) {
-      destino.deuda -= valor;
+      destino.deuda = roundMoney(destino.deuda - valor);
       const movimientoEntrada = new Movimiento(
         destino.movimientos.length + 1,
         new Date(),
@@ -145,7 +146,7 @@ export class CuentaAhorros extends Cuenta {
       );
       destino.registrarMovimiento(movimientoEntrada);
     } else {
-      destino.saldo += valor;
+      destino.saldo = roundMoney(destino.saldo + valor);
       const movimientoEntrada = new Movimiento(
         destino.movimientos.length + 1,
         new Date(),

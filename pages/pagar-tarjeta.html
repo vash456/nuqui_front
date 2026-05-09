@@ -38,6 +38,13 @@
                     </div>
 
                     <div class="input-group">
+                        <label>Cuenta para el pago</label>
+                        <select id="cuentaSelect" class="dark-input select-custom" required>
+                            <option value="">Seleccione una cuenta...</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
                         <label>Monto a Pagar</label>
                         <div class="input-wrapper">
                             <i class="fas fa-dollar-sign"></i>
@@ -48,12 +55,29 @@
                     <div id="tarjetaInfo" class="tarjeta-info" style="display: none;">
                         <div class="balance-display">
                             <div class="info-row">
+                                <span class="label">Tarjeta seleccionada:</span>
+                                <span class="amount" id="tarjetaSeleccionada">-</span>
+                            </div>
+                            <div class="info-row">
                                 <span class="label">Deuda Actual:</span>
                                 <span class="amount" id="deudaActual">$0.00</span>
                             </div>
                             <div class="info-row">
                                 <span class="label">Cupo Disponible:</span>
                                 <span class="amount" id="cupoDisponible">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cuentaInfo" class="tarjeta-info cuenta-info" style="display: none;">
+                        <div class="balance-display">
+                            <div class="info-row">
+                                <span class="label">Cuenta seleccionada:</span>
+                                <span class="amount" id="cuentaSeleccionada">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Saldo disponible:</span>
+                                <span class="amount" id="saldoCuenta">$0.00</span>
                             </div>
                         </div>
                     </div>

@@ -39,6 +39,14 @@ body {
     padding: 20px;
 }
 
+.landing-body,
+.auth-body {
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 0;
+}
+
 /* =========================================
    COMPONENTES COMPARTIDOS
    ========================================= */
@@ -136,6 +144,12 @@ body {
 /* Contenedores */
 .container { width: 100%; max-width: 1000px; text-align: center; }
 .auth-container { width: 100%; max-width: 450px; text-align: center; }
+
+.landing-body .container,
+.auth-body .auth-container {
+    margin: auto;
+    padding: 40px 20px;
+}
 
 /* Tarjetas (Landing vs Forms) */
 .card, .auth-card {

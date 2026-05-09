@@ -2,6 +2,7 @@ import { Cuenta } from './Cuenta.js';
 import { Movimiento } from './Movimiento.js';
 import { TipoMovimiento } from './TipoMovimiento.js';
 import localStorageService from '../storage/localstorage.js';
+import { roundMoney } from '../utils/money.js';
 
 export class CuentaCorriente extends Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado, porcentajeSobregiro, limiteSobregiro) {
@@ -14,10 +15,10 @@ export class CuentaCorriente extends Cuenta {
     if (!Number.isFinite(monto) || monto <= 0) {
       return { success: false, message: 'El monto a retirar debe ser mayor a cero' };
     }
-    if (monto > this.saldo + this.calcularLimiteSobregiro()) {
+    if (monto > roundMoney(this.saldo + this.calcularLimiteSobregiro())) {
       return { success: false, message: 'Fondos insuficientes, incluyendo sobregiro' };
     }
-    this.saldo -= monto;
+    this.saldo = roundMoney(this.saldo - monto);
 
     // Registrar movimiento
         const movimiento = new Movimiento(
@@ -34,14 +35,14 @@ export class CuentaCorriente extends Cuenta {
   }
 
   calcularLimiteSobregiro() {
-    return (this.saldo * this.porcentajeSobregiro) / 100;
+    return roundMoney((this.saldo * this.porcentajeSobregiro) / 100);
   }
 
   consignar(monto) {
     if (!Number.isFinite(monto) || monto <= 0) {
       return { success: false, message: 'El monto a consignar debe ser mayor a cero' };
     }
-    this.saldo += monto;
+    this.saldo = roundMoney(this.saldo + monto);
 
     console.log("movimientos antes de la transferencia:");
     console.log(this.movimientos);
@@ -70,7 +71,7 @@ export class CuentaCorriente extends Cuenta {
       return { success: false, message: 'El monto de la transferencia debe ser mayor a cero' };
     }
 
-    const limiteDisponible = this.saldo + this.calcularLimiteSobregiro();
+    const limiteDisponible = roundMoney(this.saldo + this.calcularLimiteSobregiro());
     if (valor > limiteDisponible) {
       return { success: false, message: 'Fondos insuficientes, incluyendo sobregiro' };
     }
@@ -85,7 +86,7 @@ export class CuentaCorriente extends Cuenta {
     console.log("movimientos antes de la transferencia:");
     console.log(this.movimientos);
     
-    this.saldo -= valor;
+    this.saldo = roundMoney(this.saldo - valor);
     const movimientoSalida = new Movimiento(
       this.movimientos.length + 1,
       new Date(),
@@ -100,7 +101,7 @@ export class CuentaCorriente extends Cuenta {
     console.log(this.movimientos);
 
     if (destinoEsTarjeta) {
-      destino.deuda -= valor;
+      destino.deuda = roundMoney(destino.deuda - valor);
       const movimientoEntrada = new Movimiento(
         destino.movimientos.length + 1,
         new Date(),
@@ -111,7 +112,7 @@ export class CuentaCorriente extends Cuenta {
       );
       destino.registrarMovimiento(movimientoEntrada);
     } else {
-      destino.saldo += valor;
+      destino.saldo = roundMoney(destino.saldo + valor);
       const movimientoEntrada = new Movimiento(
         destino.movimientos.length + 1,
         new Date(),

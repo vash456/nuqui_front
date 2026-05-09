@@ -38,6 +38,30 @@ const uiService = {
     return true;
   },
 
+  setupPublicPageNav() {
+    const currentUser = sesionService.getCurrentUser();
+    const navLinks = document.querySelector('.nav-links');
+    const logoutLink = document.querySelector('#logoutLink');
+    const backLink = document.querySelector('.back-link[href="dashboard.html"]');
+
+    if (!currentUser && navLinks) {
+      navLinks.innerHTML = `
+        <a href="../index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="login.html"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+      `;
+      if (backLink) {
+        backLink.href = '../index.html';
+        backLink.textContent = '← Volver al inicio';
+      }
+      return;
+    }
+
+    logoutLink?.addEventListener('click', event => {
+      event.preventDefault();
+      this.manageLogoutLink();
+    });
+  },
+
   manageLogoutLink(redirectUrl = 'login.html') {
     const currentUser = sesionService.getCurrentUser();
     if (currentUser) {

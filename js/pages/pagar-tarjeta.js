@@ -1,90 +1,28 @@
 import uiService from '../services/uiService.js';
 import productosService from '../services/productosService.js';
 import sesionService from '../services/sesionService.js';
+import { roundMoney } from '../utils/money.js';
 
 const pagarForm = document.querySelector('#pagarForm');
 const tarjetaSelect = document.querySelector('#tarjetaSelect');
+const cuentaSelect = document.querySelector('#cuentaSelect');
 const montoInput = document.querySelector('#monto');
 const tarjetaInfo = document.querySelector('#tarjetaInfo');
+const cuentaInfo = document.querySelector('#cuentaInfo');
+const tarjetaSeleccionada = document.querySelector('#tarjetaSeleccionada');
+const cuentaSeleccionada = document.querySelector('#cuentaSeleccionada');
 const deudaActual = document.querySelector('#deudaActual');
 const cupoDisponible = document.querySelector('#cupoDisponible');
+const saldoCuenta = document.querySelector('#saldoCuenta');
 const messageBox = document.querySelector('#message');
 
-// Validar sesión al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-  uiService.checkSession();
-});
-
-// Cargar tarjetas del usuario
-async function cargarTarjetas() {
-    try {
-        const currentUser = sesionService.getCurrentUser();
-        if (!currentUser) {
-            window.location.href = 'login.html';
-            return;
-        }
-
-        const productos = productosService.obtenerProductosCliente(currentUser.id);
-        if (!productos) {
-            uiService.showMessage(messageBox, 'No se encontraron productos para este usuario');
-            return;
-        }
-
-        const tarjetas = productos.listarTarjetas();
-        if (tarjetas.length === 0) {
-            uiService.showMessage(messageBox, 'No tienes tarjetas disponibles');
-            return;
-        }
-
-        // Llenar select con tarjetas
-        tarjetas.forEach(tarjeta => {
-            const option = document.createElement('option');
-            option.value = tarjeta.numeroCuenta;
-            option.textContent = `Tarjeta ${tarjeta.numeroCuenta}`;
-            tarjetaSelect.appendChild(option);
-        });
-
-    } catch (error) {
-        console.error('Error cargando tarjetas:', error);
-        uiService.showMessage(messageBox, 'Error al cargar las tarjetas');
-    }
-}
-
-// Obtener tarjeta seleccionada
-function obtenerTarjetaSeleccionada() {
-    const numeroCuenta = tarjetaSelect.value;
-    if (!numeroCuenta) return null;
-
-    try {
-        const currentUser = sesionService.getCurrentUser();
-        const productos = productosService.obtenerProductosCliente(currentUser.id);
-        return productos.obtenerTarjeta(numeroCuenta);
-    } catch (error) {
-        console.error('Error obteniendo tarjeta:', error);
-        return null;
-    }
-}
-
-// Mostrar información de la tarjeta seleccionada
-tarjetaSelect.addEventListener('change', () => {
-    const tarjeta = obtenerTarjetaSeleccionada();
-    
-    if (!tarjeta) {
-        tarjetaInfo.style.display = 'none';
-        return;
-    }
-
-    try {
-        deudaActual.textContent = formatCurrency(tarjeta.deuda);
-        cupoDisponible.textContent = formatCurrency(tarjeta.cupo - tarjeta.deuda);
-        tarjetaInfo.style.display = 'block';
-    } catch (error) {
-        console.error('Error obteniendo información de tarjeta:', error);
-    }
+  if (!uiService.checkSession()) return;
+  cargarProductosPago();
 });
 
 function formatCurrency(value) {
-  const number = Number(value) || 0;
+  const number = roundMoney(value);
   return new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
@@ -92,64 +30,168 @@ function formatCurrency(value) {
   }).format(number);
 }
 
-// Manejar pago
-pagarForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    uiService.clearMessage(messageBox);
+function getCuentaLabel(cuenta) {
+  if (!cuenta) return 'Cuenta no disponible';
+  const tipo = cuenta.constructor.name === 'CuentaCorriente' ? 'Cuenta Corriente' : 'Cuenta de Ahorros';
+  return `${tipo} - ${cuenta.numeroCuenta}`;
+}
 
-    const numeroCuenta = tarjetaSelect.value;
-    const monto = parseFloat(montoInput.value);
+function getTarjetaLabel(tarjeta) {
+  return tarjeta ? `Tarjeta de Crédito - ${tarjeta.numeroCuenta}` : 'Tarjeta no disponible';
+}
 
-    if (!numeroCuenta) {
-        uiService.showMessage(messageBox, 'Selecciona una tarjeta');
-        return;
+function getSaldoDisponible(cuenta) {
+  if (!cuenta) return 0;
+  if (cuenta.constructor.name === 'CuentaCorriente') {
+    return roundMoney(Number(cuenta.saldo) + Number(cuenta.calcularLimiteSobregiro()));
+  }
+  return roundMoney(cuenta.saldo);
+}
+
+function obtenerProductosUsuario() {
+  const currentUser = sesionService.getCurrentUser();
+  if (!currentUser) return null;
+  return productosService.obtenerProductosCliente(currentUser.id);
+}
+
+function obtenerTarjetaSeleccionada(productos = obtenerProductosUsuario()) {
+  const numeroTarjeta = tarjetaSelect?.value;
+  if (!productos || !numeroTarjeta) return null;
+  return productos.obtenerTarjeta(numeroTarjeta);
+}
+
+function obtenerCuentaSeleccionada(productos = obtenerProductosUsuario()) {
+  const numeroCuenta = cuentaSelect?.value;
+  if (!productos || !numeroCuenta) return null;
+  return productos.obtenerCuenta(numeroCuenta);
+}
+
+function actualizarInfoTarjeta(tarjeta) {
+  if (!tarjeta) {
+    tarjetaInfo.style.display = 'none';
+    return;
+  }
+
+  tarjetaSeleccionada.textContent = getTarjetaLabel(tarjeta);
+  deudaActual.textContent = formatCurrency(tarjeta.deuda);
+  cupoDisponible.textContent = formatCurrency(tarjeta.cupo - tarjeta.deuda);
+  tarjetaInfo.style.display = 'block';
+}
+
+function actualizarInfoCuenta(cuenta) {
+  if (!cuenta) {
+    cuentaInfo.style.display = 'none';
+    return;
+  }
+
+  cuentaSeleccionada.textContent = getCuentaLabel(cuenta);
+  saldoCuenta.textContent = formatCurrency(getSaldoDisponible(cuenta));
+  cuentaInfo.style.display = 'block';
+}
+
+function cargarProductosPago() {
+  try {
+    const productos = obtenerProductosUsuario();
+    if (!productos) {
+      uiService.showMessage(messageBox, 'No se encontraron productos para este usuario');
+      return;
     }
 
-    if (!monto || monto <= 0) {
-        uiService.showMessage(messageBox, 'Ingresa un monto válido');
-        return;
+    const tarjetas = productos.listarTarjetas();
+    const cuentas = productos.listarCuentas();
+
+    if (tarjetas.length === 0) {
+      uiService.showMessage(messageBox, 'No tienes tarjetas disponibles');
     }
 
-    try {
-        const currentUser = sesionService.getCurrentUser();
-        const productos = productosService.obtenerProductosCliente(currentUser.id);
-        const tarjeta = productos.obtenerTarjeta(numeroCuenta);
-
-        if (!tarjeta) {
-            uiService.showMessage(messageBox, 'Tarjeta no encontrada');
-            return;
-        }
-
-        const result = tarjeta.pagar(monto);
-
-        if (!result.success) {
-            uiService.showMessage(messageBox, result.message);
-            return;
-        }
-
-        // Guardar cambios con el mismo objeto productos que tiene la tarjeta modificada
-        productosService.guardarProductos(productos);
-
-        uiService.showMessage(messageBox, `✓ ${result.message}`, 'success');
-
-        // Actualizar información mostrada
-        deudaActual.textContent = formatCurrency(result.data.nuevaDeuda);
-        cupoDisponible.textContent = formatCurrency(tarjeta.cupo - result.data.nuevaDeuda);
-
-        // Limpiar formulario
-        montoInput.value = '';
-
-    } catch (error) {
-        console.error('Error en pago:', error);
-        uiService.showMessage(messageBox, 'Error inesperado al procesar el pago');
+    if (cuentas.length === 0) {
+      uiService.showMessage(messageBox, 'No tienes cuentas disponibles para realizar pagos');
     }
+
+    tarjetas.forEach(tarjeta => {
+      const option = document.createElement('option');
+      option.value = tarjeta.numeroCuenta;
+      option.textContent = getTarjetaLabel(tarjeta);
+      tarjetaSelect.appendChild(option);
+    });
+
+    cuentas.forEach(cuenta => {
+      const option = document.createElement('option');
+      option.value = cuenta.numeroCuenta;
+      option.textContent = getCuentaLabel(cuenta);
+      cuentaSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error cargando productos para pago:', error);
+    uiService.showMessage(messageBox, 'Error al cargar los productos');
+  }
+}
+
+tarjetaSelect?.addEventListener('change', () => {
+  actualizarInfoTarjeta(obtenerTarjetaSeleccionada());
 });
 
-// Manejar logout
-document.querySelector('#logoutLink')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    uiService.manageLogoutLink();
+cuentaSelect?.addEventListener('change', () => {
+  actualizarInfoCuenta(obtenerCuentaSeleccionada());
 });
 
-// Cargar tarjetas al iniciar
-cargarTarjetas();
+pagarForm?.addEventListener('submit', event => {
+  event.preventDefault();
+  uiService.clearMessage(messageBox);
+
+  const numeroTarjeta = tarjetaSelect?.value;
+  const numeroCuenta = cuentaSelect?.value;
+  const monto = roundMoney(montoInput?.value);
+
+  if (!numeroTarjeta) {
+    uiService.showMessage(messageBox, 'Selecciona una tarjeta');
+    return;
+  }
+
+  if (!numeroCuenta) {
+    uiService.showMessage(messageBox, 'Selecciona la cuenta desde donde pagarás');
+    return;
+  }
+
+  if (!Number.isFinite(monto) || monto <= 0) {
+    uiService.showMessage(messageBox, 'Ingresa un monto válido');
+    return;
+  }
+
+  try {
+    const productos = obtenerProductosUsuario();
+    const tarjeta = obtenerTarjetaSeleccionada(productos);
+    const cuenta = obtenerCuentaSeleccionada(productos);
+
+    if (!tarjeta) {
+      uiService.showMessage(messageBox, 'Tarjeta no encontrada');
+      return;
+    }
+
+    if (!cuenta) {
+      uiService.showMessage(messageBox, 'Cuenta no encontrada');
+      return;
+    }
+
+    const result = tarjeta.pagarDesdeCuenta(cuenta, monto);
+    if (!result.success) {
+      uiService.showMessage(messageBox, result.message);
+      return;
+    }
+
+    productosService.guardarProductos(productos);
+
+    uiService.showMessage(messageBox, `✓ ${result.message}`, 'success');
+    actualizarInfoTarjeta(tarjeta);
+    actualizarInfoCuenta(cuenta);
+    montoInput.value = '';
+  } catch (error) {
+    console.error('Error en pago:', error);
+    uiService.showMessage(messageBox, 'Error inesperado al procesar el pago');
+  }
+});
+
+document.querySelector('#logoutLink')?.addEventListener('click', event => {
+  event.preventDefault();
+  uiService.manageLogoutLink();
+});

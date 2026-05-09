@@ -1,5 +1,6 @@
 ﻿import { CuentaCorriente } from '../models/CuentaCorriente.js';
 import { CuentaAhorros } from '../models/CuentaAhorros.js';
+import { roundMoney } from '../utils/money.js';
 
 const cuentaService = {
   validarMonto(monto) {
@@ -7,7 +8,7 @@ const cuentaService = {
     if (!Number.isFinite(valor) || valor <= 0) {
       return { success: false, message: 'El monto debe ser un número mayor a cero' };
     }
-    return { success: true, value: valor };
+    return { success: true, value: roundMoney(valor) };
   },
 
   esCuentaValida(cuenta) {
@@ -42,10 +43,10 @@ const cuentaService = {
     }
 
     if (cuenta instanceof CuentaCorriente) {
-      return Number(cuenta.saldo) + Number(cuenta.calcularLimiteSobregiro());
+      return roundMoney(Number(cuenta.saldo) + Number(cuenta.calcularLimiteSobregiro()));
     }
 
-    return Number(cuenta.saldo);
+    return roundMoney(cuenta.saldo);
   }
 };
 

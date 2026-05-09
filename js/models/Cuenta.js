@@ -1,14 +1,16 @@
+import { roundMoney } from '../utils/money.js';
+
 export class Cuenta {
   constructor(numeroCuenta, saldo, fechaApertura, estado) {
     this.numeroCuenta = numeroCuenta;
-    this.saldo = Number(saldo) || 0;
+    this.saldo = roundMoney(saldo);
     this.fechaApertura = fechaApertura;
     this.estado = estado;
     this.movimientos = [];
   }
 
   consultarSaldo() {
-    return Number(this.saldo) || 0;
+    return roundMoney(this.saldo);
   }
 
   consignar(monto) {

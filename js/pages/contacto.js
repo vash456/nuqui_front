@@ -1,32 +1,18 @@
 import uiService from '../services/uiService.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const contactForm = document.querySelector('#contactForm');
+  uiService.setupPublicPageNav();
 
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+  const contactForm = document.querySelector('#contactForm');
 
-            const email = document.querySelector('#email').value;
-            const message = document.querySelector('#message').value;
+  if (contactForm) {
+    contactForm.addEventListener('submit', event => {
+      event.preventDefault();
 
-            // Guardar el email en sessionStorage
-            sessionStorage.setItem('contactEmail', email);
+      const email = document.querySelector('#email').value;
 
-            // Redirigir a la página de éxito
-            window.location.href = 'mensaje-enviado.html';
-        });
-    }
-});
-
-// Validar sesión al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-  uiService.checkSession();
-});
-
-// Manejar cierre de sesión
-const logoutLink = document.querySelector('#logoutLink');
-logoutLink?.addEventListener('click', event => {
-  event.preventDefault();
-  uiService.manageLogoutLink();
+      sessionStorage.setItem('contactEmail', email);
+      window.location.href = 'mensaje-enviado.html';
+    });
+  }
 });

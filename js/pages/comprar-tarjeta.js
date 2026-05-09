@@ -1,6 +1,7 @@
 import uiService from '../services/uiService.js';
 import productosService from '../services/productosService.js';
 import sesionService from '../services/sesionService.js';
+import { roundMoney } from '../utils/money.js';
 
 const comprarForm = document.querySelector('#comprarForm');
 const tarjetaSelect = document.querySelector('#tarjetaSelect');
@@ -107,11 +108,13 @@ function validarMonto() {
 
     if (!tarjeta || !monto) return;
 
-    const cupoDisponibleNum = tarjeta.cupo - tarjeta.deuda;
+    const detalles = tarjeta.calcularDetallesCuota(monto, parseInt(cuotasSelect.value));
+    const cupoDisponibleNum = roundMoney(tarjeta.cupo - tarjeta.deuda);
+    const totalAValidar = detalles.totalFinanciado;
     
-    if (monto > cupoDisponibleNum) {
+    if (totalAValidar > cupoDisponibleNum) {
         montoInput.classList.add('input-error');
-        uiService.showMessage(messageBox, `El monto excede el cupo disponible ($${cupoDisponibleNum.toFixed(2)})`);
+        uiService.showMessage(messageBox, `El total financiado ($${totalAValidar.toFixed(2)}) excede el cupo disponible ($${cupoDisponibleNum.toFixed(2)})`);
     } else {
         montoInput.classList.remove('input-error');
         uiService.clearMessage(messageBox);
@@ -189,7 +192,7 @@ comprarForm.addEventListener('submit', async (event) => {
         // Construir mensaje de éxito con información de la cuota
         let mensajeExito = `✓ ${result.message}`;
         if (cuotas > 1) {
-            mensajeExito += `\nCuotas: ${cuotas} | Tasa: ${result.data.tasa}% | Cuota: $${result.data.cuotaMensual.toFixed(2)}`;
+            mensajeExito += `\nCuotas: ${cuotas} | Tasa: ${result.data.tasa}% | Intereses: $${result.data.intereses.toFixed(2)} | Total: $${result.data.totalFinanciado.toFixed(2)} | Cuota: $${result.data.cuotaMensual.toFixed(2)}`;
         }
         
         uiService.showMessage(messageBox, mensajeExito, 'success');
