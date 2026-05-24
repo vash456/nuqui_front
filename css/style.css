@@ -259,6 +259,191 @@ h1 { font-size: 75px; color: var(--primary-gold); letter-spacing: 6px; font-weig
 .trend { color: #4ade80; font-size: 14px; }
 .eye-icon { color: var(--primary-gold); font-size: 20px; cursor: pointer; }
 
+/* ================================
+   Estilos del Chat Flotante ASTRO
+   ================================ */
+
+:root {
+    --chat-bg: rgba(8, 8, 8, 0.96);
+    --chat-border: rgba(255, 179, 0, 0.24);
+    --chat-header-bg: rgba(18, 18, 18, 0.98);
+    --chat-bubble-user: rgba(255, 179, 0, 0.14);
+    --chat-bubble-assistant: rgba(255, 255, 255, 0.07);
+    --chat-text: #f7f1dc;
+    --chat-placeholder: #b9a36a;
+}
+
+.chat-toggle-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1600;
+    background: var(--primary-gold);
+    color: #000;
+    border: none;
+    border-radius: 999px;
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: var(--glow-button);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform var(--transition), background var(--transition);
+}
+
+.chat-toggle-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.chat-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 90px;
+    width: clamp(320px, 92vw, 380px);
+    max-height: 540px;
+    background: var(--chat-bg);
+    border: 1px solid var(--chat-border);
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1550;
+    backdrop-filter: blur(18px);
+}
+
+.chat-panel.open {
+    display: flex;
+}
+
+.chat-header {
+    background: var(--chat-header-bg);
+    padding: 18px 18px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--chat-border);
+}
+
+.chat-title {
+    color: var(--primary-gold);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.chat-subtitle {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.chat-close-button {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.chat-messages {
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    min-height: 220px;
+    max-height: 340px;
+}
+
+.chat-message {
+    padding: 14px 16px;
+    border-radius: 18px;
+    line-height: 1.5;
+    font-size: 14px;
+    color: var(--chat-text);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background: var(--chat-bubble-user);
+    color: #000;
+    border: 1px solid rgba(255, 179, 0, 0.25);
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+    background: var(--chat-bubble-assistant);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chat-message.typing {
+    font-style: italic;
+    color: var(--primary-gold);
+    background: rgba(255, 179, 0, 0.08);
+}
+
+.chat-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 16px;
+    border-top: 1px solid var(--chat-border);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.chat-input {
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--input-bg);
+    color: var(--text-main);
+    padding: 14px 18px;
+    outline: none;
+    font-size: 14px;
+}
+
+.chat-input::placeholder {
+    color: var(--chat-placeholder);
+}
+
+.chat-send-button {
+    background: var(--primary-gold);
+    border: none;
+    border-radius: 999px;
+    color: #000;
+    padding: 0 24px;
+    min-width: 84px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform var(--transition), background var(--transition);
+}
+
+.chat-send-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 520px) {
+    .chat-toggle-button {
+        right: 16px;
+        bottom: 16px;
+        padding: 14px 16px;
+    }
+
+    .chat-panel {
+        right: 16px;
+        bottom: 76px;
+        width: calc(100vw - 32px);
+    }
+}
+
 /* GRIDS */
 .accounts-grid, .actions-grid {
     display: grid;
