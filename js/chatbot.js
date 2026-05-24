@@ -1,6 +1,6 @@
 // Nota: no pongas tu API key en el frontend para producción. Usa un proxy/backend.
 // Al inicio de tu archivo de JS
-import { ENV } from './config.js';
+import { ENV } from '../config.js';
 
 const GEMINI_API_KEY = ENV.GEMINI_API_KEY;
 
