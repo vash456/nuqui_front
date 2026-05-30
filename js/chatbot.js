@@ -62,7 +62,7 @@ async function askGemini(prompt) {
     // 2. CREAR EL MODELO CON EL CONTEXTO INYECTADO
     const model = client.getGenerativeModel({
         model: "gemini-flash-latest",
-        systemInstruction: `Eres ASTRO, el asistente virtual del entorno bancario Luciastore.
+        systemInstruction: `Eres ASTRO, el asistente virtual del entorno bancario AstroBank.
         
         Para que tengas contexto, esto es todo lo que el usuario está viendo en su pantalla ahora mismo:
         --- INICIO DE LA PANTALLA DEL USUARIO ---
